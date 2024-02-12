@@ -19,6 +19,7 @@ class CarModel(models.Model):
 class CarImage(models.Model):
    
     image = models.ImageField(upload_to='car_images/')
+    
 
 class Car(models.Model):
     

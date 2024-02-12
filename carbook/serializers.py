@@ -1,12 +1,3 @@
-# from rest_framework import serializers
-# from decimal import Decimal
-# from .models import Booking, Car, CarImage, CarMake, CarModel
-
-
-
-
-
-
 
 from rest_framework import serializers
 from decimal import Decimal
@@ -122,37 +113,43 @@ class CarBookingSerializer(serializers.ModelSerializer):
 
 
 
-# class CarBookingSerializer(serializers.ModelSerializer):
-#     car = CarSerializer()
+# from rest_framework import serializers
+# from .models import Booking
+# from .models import Wallet  # Import Wallet model if you haven't already
 
+# class CarBookingSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = Booking
-#         fields = ('car', 'start_date', 'end_date', 'pickup_time', 'dropoff_time', 'age', 'is_approved', 'total_amount')
+#         fields = ('id', 'user', 'car', 'start_date', 'end_date', 'pickup_time', 'dropoff_time', 'age', 'is_approved', 'total_amount')
 
 #     def create(self, validated_data):
-#         car_data = validated_data.pop('car')
-#         duration = (validated_data['end_date'] - validated_data['start_date']).days
-#         price_per_day = Decimal(car_data['price_per_day'])
-#         total_amount = price_per_day * Decimal(duration)
+#         user = validated_data['user']
+#         car = validated_data['car']
+#         start_date = validated_data['start_date']
+#         end_date = validated_data['end_date']
 
-#         validated_data['total_amount'] = total_amount
+#         # Calculate the day difference between start_date and end_date
+#         day_difference = (end_date - start_date).days
 
-#         booking_instance = Booking.objects.create(**validated_data)
-#         return booking_instance
+#         # Get the price from the car associated with the booking
+#         car_price = car.price_per_day
 
-#     def update(self, instance, validated_data):
-#         car_data = validated_data.get('car', instance.car)
-#         instance.start_date = validated_data.get('start_date', instance.start_date)
-#         instance.end_date = validated_data.get('end_date', instance.end_date)
-#         instance.pickup_time = validated_data.get('pickup_time', instance.pickup_time)
-#         instance.dropoff_time = validated_data.get('dropoff_time', instance.dropoff_time)
-#         instance.age = validated_data.get('age', instance.age)
-#         instance.is_approved = validated_data.get('is_approved', instance.is_approved)
+#         # Calculate the total_amount based on the price and day difference
+#         total_amount = car_price * day_difference
 
-#         duration = (instance.end_date - instance.start_date).days
-#         price_per_day = Decimal(car_data['price_per_day'])
-#         total_amount = price_per_day * Decimal(duration)
-#         instance.total_amount = total_amount
+#         # Check if user has a wallet
+#         wallet = Wallet.objects.get(user=user)
+        
+#         # Check if the wallet balance is sufficient
+#         if wallet.balance >= total_amount:
+#             # Update the validated_data with the calculated total_amount
+#             validated_data['total_amount'] = total_amount
 
-#         instance.save()
-#         return instance
+#             # Deduct the total_amount from the user's wallet
+#             wallet.balance -= total_amount
+#             wallet.save()
+
+#             booking = Booking.objects.create(**validated_data)
+#             return booking
+#         else:
+#             raise serializers.ValidationError("Insufficient funds in the wallet.")
