@@ -3,7 +3,7 @@ from django.db import models
 
 
 # class Skisubuser(AbstractUser):
-    
+
 #     phone=models.CharField(max_length=14)
 #     created_date=models.DateField(auto_now_add=True)
 #     updated_date=models.DateField(auto_now=True)
@@ -14,14 +14,14 @@ from django.db import models
 #     is_admin=models.BooleanField(default=False)
 #     # def __str__(self):
 #     #   return self.name
-  
+
 class BillOperation(models.Model):
     billtype=(
         ("recharge_card","recharge_card"),
         ("data","data"),
         ("sme_data","sme_data"),
-        ("flight_booking","flight_booking"),
-        ("car_rentage","car_rentage"),
+        # ("flight_booking","flight_booking"),
+        # ("car_rentage","car_rentage"),
         ("electricity","electricity"),
         ("cabletv","cabletv")
     )
@@ -39,23 +39,24 @@ class BillOperation(models.Model):
     amount=models.IntegerField(null=True,blank=True)
     # for data
     dataplan=models.CharField(max_length=200,null=True,blank=True)
+    rechargeplan=models.CharField(max_length=200,null=True,blank=True)
 
     # bookflight model
 
-    location=models.CharField(max_length=200,null=True,blank=True)
-    destination=models.CharField(max_length=200,null=True,blank=True)
-    departdate=models.DateField(auto_now=False,null=True,blank=True)
-    selectclass=(
-        ("economy","economy"),
-        ("firstclass","firstclass"),
-        ("nostop","nostop"),
-        ("others","others")
-    )
-    flightclass=models.CharField(max_length=100,choices=selectclass,default='economy',null=True,blank=True)
-    passenger=models.IntegerField(null=True,blank=True)
+    # location=models.CharField(max_length=200,null=True,blank=True)
+    # destination=models.CharField(max_length=200,null=True,blank=True)
+    # departdate=models.DateField(auto_now=False,null=True,blank=True)
+    # selectclass=(
+    #     ("economy","economy"),
+    #     ("firstclass","firstclass"),
+    #     ("nostop","nostop"),
+    #     ("others","others")
+    # )
+    # flightclass=models.CharField(max_length=100,choices=selectclass,default='economy',null=True,blank=True)
+    # passenger=models.IntegerField(null=True,blank=True)
 
     # car rentage
-    cartype=models.CharField(max_length=200,default="toyota",null=True,blank=True),
+    # cartype=models.CharField(max_length=200,default="toyota",null=True,blank=True),
     # dropoffdate=models.DateTimeField(auto_created=False)
 
 
@@ -74,7 +75,7 @@ class BillOperation(models.Model):
     selectbouquet=models.CharField(max_length=100,null=True,blank=True)
 
 
-   
+
 
 
 #    from django.db import models
