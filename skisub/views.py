@@ -1,4 +1,4 @@
-from django.shortcuts import render
+# from django.shortcuts import render
 from skisub.models import BillOperation
 # from rest_framework.views import APIView
 # from knox.models import AuthToken
@@ -6,7 +6,7 @@ from skisub.models import BillOperation
 # from django.contrib.auth import get_user_model, login, logout
 from rest_framework.response import Response
 # from rest_framework import generics
-from skisub.serializers import BookFlightSerializer, CarBookingSerializer, DataSerializer, CabletvSerializer
+from skisub.serializers import  DataSerializer, CabletvSerializer, AirtimeSerializer, ElectricitySerializer
 # from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly, IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework import status
 from rest_framework import viewsets
@@ -34,7 +34,7 @@ from rest_framework.response import Response
 #             return Response(response)
 #         else:
 #             return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
-            
+
 
 
 
@@ -58,17 +58,15 @@ class BillOperationViewSet(viewsets.ModelViewSet):
         # Determine which serializer to use based on the request data
         if 'dataplan' in self.request.data:
             return DataSerializer
-        elif 'location' in self.request.data:
-            return BookFlightSerializer
-        elif 'cartype' in self.request.data:
-            return CarBookingSerializer
+        elif 'rechargeplan' in self.request.data:
+            return AirtimeSerializer
+        elif 'meterno' in self.request.data:
+            return ElectricitySerializer
         elif 'selectbouquet' in self.request.data:
             return CabletvSerializer
         else:
-            # Return a default serializer class or raise an error if needed
-            # For example, you can return a generic serializer or raise an error.
-            return BookFlightSerializer # You should define DefaultSerializer
-
+            # Explicitly raise an error for clarity and error handling
+            raise ValueError("Invalid request data. Missing required fields.")
     def create(self, request, *args, **kwargs):
         serializer_class = self.get_serializer_class()
         serializer = serializer_class(data=request.data)

@@ -1,4 +1,4 @@
-from account.models import Skisubuser
+from account.models import Skisubuser,Transaction
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
@@ -44,3 +44,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+class TransactionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Transaction
+        fields = '__all__'

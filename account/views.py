@@ -5,13 +5,13 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import get_user_model, login, logout
 from rest_framework.response import Response
 from rest_framework import generics
-from account.models import Skisubuser
+from account.models import Skisubuser, Transaction
 from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly, IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.response import Response
 
-from account.serializers import RegisterSerializer, skisubUserSerializer
+from account.serializers import RegisterSerializer, TransactionSerializer, skisubUserSerializer
 
 class RegisterView(generics.CreateAPIView):
     queryset = Skisubuser.objects.all()
@@ -49,3 +49,16 @@ class LogoutView(APIView):
                         "message": "Successfully logged out",
                         "data": ""}
         return Response(response)
+
+class TransactionListCreateView(APIView):
+    def get(self, request):
+        transactions = Transaction.objects.all()
+        serializer = TransactionSerializer(transactions, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = TransactionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

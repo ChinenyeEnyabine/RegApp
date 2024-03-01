@@ -45,31 +45,32 @@ from rest_framework import serializers
 #             phone=validated_data['phone'],
 #             # status=validated_data['status'],
 #             is_staff=validated_data['is_staff'],
-           
 
-           
+
+
 
 #         )
 
-        
+
 #         user.set_password(validated_data['password'])
 #         user.save()
 
 #         return user
-    
+
 class AirtimeSerializer(serializers.ModelSerializer):
     class Meta:
         model=BillOperation
-        fields=['billclass','serviceops','phone','amount']
+        fields=['billclass','serviceops','phone','amount','rechargeplan']
     def create(self,validated_data):
         airtime=BillOperation.objects.create(
             billclass=validated_data['billclass'],
             serviceops=validated_data['serviceops'],
             phone=validated_data['phone'],
-            amount=validated_data['amount']   
+            amount=validated_data['amount'],
+            rechargeplan=validated_data['rechargeplan']
         )
         return airtime
-    
+
 class DataSerializer(serializers.ModelSerializer):
     class Meta:
         model=BillOperation
@@ -80,39 +81,10 @@ class DataSerializer(serializers.ModelSerializer):
             serviceops=validated_data['serviceops'],
             phone=validated_data['phone'],
             amount=validated_data['amount'],
-            dataplan=validated_data['dataplan'] 
+            dataplan=validated_data['dataplan']
         )
         return data
-class BookFlightSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=BillOperation
-        fields=['location','destination','departdate','flightclass','passenger']
-    def create(self, validated_data):
-        flight=BillOperation.objects.create(
-            location=validated_data['location'],
-            destination=validated_data['destination'],
-            departdate=validated_data['departdate'],
-            flightclass=validated_data['flightclass'],
-            passenger=validated_data['passenger']
-        )
-        return flight
-    
-class CarBookingSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=BillOperation
-        fields=['location','destination','departdate','cartype','passenger']
-    
-    def create(self, validated_data):
-        carbooking=BillOperation.objects.create(
-            location=validated_data['location'],
-            destination=validated_data['destination'],
-            departdate=validated_data['departdate'],
-            flightclass=validated_data['cartype'],
-            passenger=validated_data['passenger'],
-            # dropoffdate=validated_data['dropoffdate']
-        )
 
-        return carbooking
 class CabletvSerializer(serializers.ModelSerializer):
     class Meta:
         model=BillOperation
@@ -126,3 +98,15 @@ class CabletvSerializer(serializers.ModelSerializer):
             )
             return cable
 
+
+class ElectricitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model=BillOperation
+        fields=['category','serviceops','meterno']
+        def create(self,validated_data):
+            electricity=BillOperation.objects.create(
+               category=validated_data['category'],
+               serviceops=validated_data['serviceops'],
+               smart_card=validated_data['meterno']
+            )
+            return electricity
