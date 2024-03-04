@@ -9,6 +9,7 @@ from django.contrib import admin
 from carbook.models import CarMake, Car, CarImage, Booking, CarModel
 from hotelbooking.models import Amenity, HotelImage, Hotel
 from hotelbooking.models import Booking as hotelbooking
+from account.models import Transaction
 
 admin.site.register(BillOperation)
 
@@ -94,6 +95,7 @@ admin.site.register(Amenity, AmenityAdmin)
 admin.site.register(Hotel, HotelAdmin)
 admin.site.register(HotelImage)
 admin.site.register(hotelbooking, BookingAdmin)
+admin.site.register(Transaction)
 # admin.site.register(Transaction)
 
 
