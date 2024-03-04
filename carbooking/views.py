@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import viewsets,permissions
 from .models import Car, Booking, CarMake, CarModel
 from .serializers import CarSerializer, BookingSerializer, CarmakeSerializer, CarmodelSerializer
 
@@ -18,4 +18,5 @@ class CarViewSet(viewsets.ModelViewSet):
 class BookingViewSet(viewsets.ModelViewSet):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
+    
 

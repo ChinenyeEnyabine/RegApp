@@ -1,6 +1,7 @@
 from rest_framework import viewsets,permissions
 from .models import Booking, Hotel
 from .serializers import HotelBookingSerializer, HotelSerializers
+from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly, IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
 
 class HotelViewSet(viewsets.ModelViewSet):
     queryset = Hotel.objects.all()
@@ -17,4 +18,4 @@ class HotelBookingViewSet(viewsets.ModelViewSet):
            return Booking.objects.filter(user=user)
         else:
            return Booking.objects.none()
-    permission_classes=[permissions.IsAuthenticated]
+    # permission_classes=[permissions.IsAuthenticated]

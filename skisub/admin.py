@@ -96,7 +96,7 @@ admin.site.register(Hotel, HotelAdmin)
 admin.site.register(HotelImage)
 admin.site.register(hotelbooking, BookingAdmin)
 admin.site.register(Transaction)
-# admin.site.register(Transaction)
+
 
 
 

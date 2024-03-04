@@ -35,12 +35,12 @@ class Skisubuser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    phone = models.CharField(max_length=14)
+    phone_no = models.CharField(max_length=100)
     first_name=models.CharField(max_length=100)
     last_name=models.CharField(max_length=100)
     created_date = models.DateField(auto_now_add=True)
     updated_date = models.DateField(auto_now=True)
-    account_number=models.CharField(max_length=20, blank=True)
+    account_number=models.CharField(max_length=20, blank=True, unique=True)
 
     objects = CustomUserManager()
 
@@ -97,10 +97,10 @@ def set_account_number(sender, instance, created, **kwargs):
 
 
 class Transaction(models.Model):
-    user = models.ForeignKey(Skisubuser, on_delete=models.CASCADE, related_name='transactions')
+    skisubuser = models.ForeignKey(Skisubuser, on_delete=models.CASCADE)
     sessionId = models.CharField(max_length=50)
     initiationTranRef = models.CharField(max_length=50, blank=True)
-    accountNumber = models.CharField(max_length=20)
+    # account_number = models.CharField(max_length=20)
     tranRemarks = models.CharField(max_length=255, blank=True)
     transactionAmount = models.DecimalField(max_digits=15, decimal_places=2)
     settledAmount = models.DecimalField(max_digits=15, decimal_places=2)
@@ -116,3 +116,4 @@ class Transaction(models.Model):
 
     def __str__(self):
         return self.sessionId
+
