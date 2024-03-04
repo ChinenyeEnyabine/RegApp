@@ -9,7 +9,7 @@
 #     phone = models.CharField(max_length=14)
 #     created_date = models.DateField(auto_now_add=True)
 #     updated_date = models.DateField(auto_now=True)
-    
+
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from django.db.models.signals import post_save
@@ -57,7 +57,7 @@ class Skisubuser(AbstractBaseUser, PermissionsMixin):
     # is_staff=models.BooleanField(default=False)
     # is_user=models.BooleanField(default=False),
     # is_admin=models.BooleanField(default=False)
-    
+
 
     def __str__(self):
         return self.email
@@ -116,4 +116,3 @@ class Transaction(models.Model):
 
     def __str__(self):
         return self.sessionId
-
