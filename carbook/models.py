@@ -1,7 +1,7 @@
 from datetime import date
 from django.db import models
 from datetime import time
-from account.models import Skisubuser
+from account.models import User
 
 class CarMake(models.Model):
     name = models.CharField(max_length=100)
@@ -33,7 +33,7 @@ class Car(models.Model):
         return f'{self.model.make.name} --- {self.model.name}'
 
 class Booking(models.Model):
-    user=models.ForeignKey(Skisubuser,on_delete=models.CASCADE)
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
     car = models.ForeignKey(Car, on_delete=models.CASCADE)
     start_date = models.DateField(default=date.today)
     end_date = models.DateField(default=date.today)

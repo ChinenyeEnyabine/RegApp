@@ -1,6 +1,6 @@
 from django.db import models
 from django.db import models
-from account.models import Skisubuser
+from account.models import User
 class Amenity(models.Model):
     name = models.CharField(max_length=50)
     # hotel = models.ForeignKey('Hotel', on_delete=models.CASCADE)
@@ -28,7 +28,7 @@ class Hotel(models.Model):
 
 # Model to represent hotel bookings
 class Booking(models.Model):
-    user = models.ForeignKey(Skisubuser, on_delete=models.CASCADE, null=True, related_name='bookin')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='bookin')
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
     check_in_date = models.DateField()
     check_out_date = models.DateField()

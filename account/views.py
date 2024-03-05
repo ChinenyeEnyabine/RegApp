@@ -2,53 +2,39 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from knox.models import AuthToken
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import get_user_model, login, logout
+from django.contrib.auth import  login
 from rest_framework.response import Response
-from rest_framework import generics
-from account.models import Skisubuser, Transaction
-from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly, IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
+
+from account.models import User, Transaction
 from rest_framework import status
-from rest_framework import viewsets
+from rest_framework import generics
 from rest_framework.response import Response
-
-from account.serializers import RegisterSerializer, TransactionSerializer, skisubUserSerializer
-
+from rest_framework.permissions import AllowAny
+from account.serializers import LoginSerializer, RegisterSerializer, TransactionSerializer
 class RegisterView(generics.CreateAPIView):
-    queryset = Skisubuser.objects.all()
+    queryset = User.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
-
 class LoginView(APIView):
     permission_classes = []
+
     def post(self, request):
         form = AuthenticationForm(data=request.data)
         if form.is_valid():
             user = form.get_user()
             login(request, user=form.get_user())
-            response = {"status_code": status.HTTP_200_OK,
-                        "success": "true",
-                        "message": "Successfully logged in",
-                        "data": skisubUserSerializer(user).data,
-                        "token": AuthToken.objects.create(user)[1]
-                        }
+
+            
+            response = {
+                "status_code": status.HTTP_200_OK,
+                "success": "true",
+                "message": "Successfully logged in",
+                "data": LoginSerializer(user).data,
+                "token": AuthToken.objects.create(user)[1]
+            }
             return Response(response)
         else:
             return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
-            
-
-
-
-#logout
-class LogoutView(APIView):
-    # permission_classes = (IsAuthenticated,)
-
-    def post(self, *args, **kwargs):
-        logout(self.request)
-        response = {"status_code": status.HTTP_204_NO_CONTENT,
-                        "success": "true",
-                        "message": "Successfully logged out",
-                        "data": ""}
-        return Response(response)
 
 class TransactionListCreateView(APIView):
     def get(self, request):

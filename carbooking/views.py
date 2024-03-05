@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets,permissions
 from .models import Car, Booking, CarMake, CarModel
 from .serializers import CarSerializer, BookingSerializer, CarmakeSerializer, CarmodelSerializer
-
+from rest_framework.permissions import IsAuthenticated
 class CarMakeViewSet(viewsets.ModelViewSet):
     queryset = CarMake.objects.all()
     serializer_class = CarmakeSerializer
@@ -18,5 +18,5 @@ class CarViewSet(viewsets.ModelViewSet):
 class BookingViewSet(viewsets.ModelViewSet):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
-    
+    # permission_classes = [IsAuthenticated]
 

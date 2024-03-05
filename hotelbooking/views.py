@@ -18,4 +18,4 @@ class HotelBookingViewSet(viewsets.ModelViewSet):
            return Booking.objects.filter(user=user)
         else:
            return Booking.objects.none()
-    # permission_classes=[permissions.IsAuthenticated]
+    # permission_classes = [IsAuthenticated]

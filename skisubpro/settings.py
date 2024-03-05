@@ -69,7 +69,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-AUTH_USER_MODEL = "account.Skisubuser"
+AUTH_USER_MODEL = "account.User"
 
 ROOT_URLCONF = 'skisubpro.urls'
 
