@@ -1,0 +1,31 @@
+name: Production Build and Test
+
+on:
+  push:
+    branches: [prod]
+
+
+
+  deploy:
+      
+      runs-on: ubuntu-latest
+
+      steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+
+      - name: Generate deployment package
+        run: zip -r deploy.zip . -x '*.git*'
+
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v20
+        with:
+          aws_access_key: ${{ secrets.AWS_STAGING_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_STAGING_SECRET }}
+          application_name: edutestapi
+          environment_name: eduprod-v24
+          version_label: apiprod.${{github.run_number}}
+          version_description: none
+          region: "eu-west-1"
+          deployment_package: deploy.zip
+          use_existing_version_if_available: true

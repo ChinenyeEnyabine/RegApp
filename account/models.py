@@ -5,25 +5,26 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.forms import ValidationError
 import requests
 import uuid
 
 class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=True) 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     first_name=models.CharField(max_length=100)
     last_name=models.CharField(max_length=100)
     created_date = models.DateField(auto_now_add=True)
     updated_date = models.DateField(auto_now=True)
-    account_number=models.CharField(max_length=20, blank=True, unique=True)
-    phone_number = models.CharField(max_length=20, blank=True)
+    account_number=models.CharField(max_length=20, blank=True)
+    phone_number = models.CharField(max_length=20)
     photo = models.ImageField(upload_to='photos',  blank=True)
     is_admin = models.BooleanField(default=False)
     is_user = models.BooleanField(default=False)
     
-
+    
     def __str__(self):
         return self.email
     
@@ -52,6 +53,7 @@ def set_account_number(sender, instance, created, **kwargs):
         if response.status_code == 200:
             # Extract the account number from the response
             account_number = response.json().get('account_number')
+            print('account_number')
             
             # Update the corresponding UserSignup instance with the account number
             instance.account_number = account_number
