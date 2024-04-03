@@ -1,6 +1,8 @@
 
 from rest_framework import serializers
 from decimal import Decimal
+
+from account.models import Transaction
 from .models import Booking, Car, CarImage, CarMake, CarModel
 
 from rest_framework import serializers
@@ -85,45 +87,12 @@ class CarSerializer(serializers.ModelSerializer):
 
 #         return car
 
-class CarBookingSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Booking
-        fields = ('id', 'user', 'car', 'start_date', 'end_date', 'pickup_time', 'dropoff_time', 'age', 'is_approved', 'total_amount')
-
-    def create(self, validated_data):
-        car = validated_data['car']
-        start_date = validated_data['start_date']
-        end_date = validated_data['end_date']
-
-        # Calculate the day difference between start_date and end_date
-        day_difference = (end_date - start_date).days
-
-        # Get the price from the car associated with the booking
-        car_price = car.price_per_day
-
-        # Calculate the total_amount based on the price and day difference
-        total_amount = car_price * day_difference
-
-        # Update the validated_data with the calculated total_amount
-        validated_data['total_amount'] = total_amount
-
-        booking = Booking.objects.create(**validated_data)
-
-        return booking
-
-
-
-# from rest_framework import serializers
-# from .models import Booking
-# from .models import Wallet  # Import Wallet model if you haven't already
-
 # class CarBookingSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = Booking
 #         fields = ('id', 'user', 'car', 'start_date', 'end_date', 'pickup_time', 'dropoff_time', 'age', 'is_approved', 'total_amount')
 
 #     def create(self, validated_data):
-#         user = validated_data['user']
 #         car = validated_data['car']
 #         start_date = validated_data['start_date']
 #         end_date = validated_data['end_date']
@@ -137,19 +106,52 @@ class CarBookingSerializer(serializers.ModelSerializer):
 #         # Calculate the total_amount based on the price and day difference
 #         total_amount = car_price * day_difference
 
-#         # Check if user has a wallet
-#         wallet = Wallet.objects.get(user=user)
+#         # Update the validated_data with the calculated total_amount
+#         validated_data['total_amount'] = total_amount
+
+#         booking = Booking.objects.create(**validated_data)
+
+#         return booking
+
+
+
+from rest_framework import serializers
+from .models import Booking
+ # Import Wallet model if you haven't already
+
+class CarBookingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Booking
+        fields = ('id', 'user', 'car', 'start_date', 'end_date', 'pickup_time', 'dropoff_time', 'age', 'is_approved', 'total_amount')
+
+    def create(self, validated_data):
+        user = validated_data['user']
+        car = validated_data['car']
+        start_date = validated_data['start_date']
+        end_date = validated_data['end_date']
+
+        # Calculate the day difference between start_date and end_date
+        day_difference = (end_date - start_date).days
+
+        # Get the price from the car associated with the booking
+        car_price = car.price_per_day
+
+        # Calculate the total_amount based on the price and day difference
+        total_amount = car_price * day_difference
+
+        # Check if user has a wallet
+        wallet = Transaction.objects.get(user=user)
         
-#         # Check if the wallet balance is sufficient
-#         if wallet.balance >= total_amount:
-#             # Update the validated_data with the calculated total_amount
-#             validated_data['total_amount'] = total_amount
+        # Check if the wallet balance is sufficient
+        if wallet.settledAmount >= total_amount:
+            # Update the validated_data with the calculated total_amount
+            validated_data['total_amount'] = total_amount
 
-#             # Deduct the total_amount from the user's wallet
-#             wallet.balance -= total_amount
-#             wallet.save()
+            # Deduct the total_amount from the user's wallet
+            wallet.settledAmount -= total_amount
+            wallet.save()
 
-#             booking = Booking.objects.create(**validated_data)
-#             return booking
-#         else:
-#             raise serializers.ValidationError("Insufficient funds in the wallet.")
+            booking = Booking.objects.create(**validated_data)
+            return booking
+        else:
+            raise serializers.ValidationError("Insufficient funds in the wallet.")

@@ -74,7 +74,7 @@ class Transaction(models.Model):
     feeAmount = models.DecimalField(max_digits=15, decimal_places=2)
     vatAmount = models.DecimalField(max_digits=15, decimal_places=2)
     currency = models.CharField(max_length=3)
-    settlementId = models.CharField(max_length=50)
+    settlementId = models.CharField(max_length=50, unique=True)
     sourceAccountNumber = models.CharField(max_length=20, blank=True)
     sourceAccountName = models.CharField(max_length=255, blank=True)
     sourceBankName = models.CharField(max_length=255, blank=True)
