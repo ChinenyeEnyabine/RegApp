@@ -20,7 +20,7 @@ class User(AbstractUser):
     updated_date = models.DateField(auto_now=True)
     account_number=models.CharField(max_length=20, blank=True)
     phone_number = models.CharField(max_length=20)
-    photo = models.ImageField(upload_to='photos',  blank=True)
+    photo = models.ImageField(upload_to='photos',  blank=True, null=True)
     is_admin = models.BooleanField(default=False)
     is_user = models.BooleanField(default=False)
     
@@ -64,10 +64,10 @@ def set_account_number(sender, instance, created, **kwargs):
 
 
 class Transaction(models.Model):
-    User = models.ForeignKey(User, on_delete=models.CASCADE)
+    
     sessionId = models.CharField(max_length=50)
     initiationTranRef = models.CharField(max_length=50, blank=True)
-    # accountNumber = models.CharField(max_length=20)
+    account_number = models.CharField(max_length=20) 
     tranRemarks = models.CharField(max_length=255, blank=True)
     transactionAmount = models.DecimalField(max_digits=15, decimal_places=2)
     settledAmount = models.DecimalField(max_digits=15, decimal_places=2)
@@ -80,7 +80,7 @@ class Transaction(models.Model):
     sourceBankName = models.CharField(max_length=255, blank=True)
     channelId = models.CharField(max_length=50, blank=True)
     tranDateTime = models.DateTimeField()
-
+    
     def __str__(self):
-        return self.sessionId
+        return self.account_number
 

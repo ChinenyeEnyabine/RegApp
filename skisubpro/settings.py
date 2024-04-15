@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'hotelbooking',
     'rest_framework',
     'account',
-    'carbook'
+    'carbook',
+    'transactional'
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [

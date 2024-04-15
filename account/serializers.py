@@ -50,7 +50,65 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.save()
 
         return user        
+# class TransactionSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Transaction
+#         fields = '__all__'
+
+
+from rest_framework import serializers
+from .models import Transaction,User
+
+#
+        
+#         return transaction
+from rest_framework import serializers
+from .models import Transaction
+
+# class TransactionSerializer(serializers.ModelSerializer):
+#     account_number = serializers.CharField(source='User.account_number')
+
+#     class Meta:
+#         model = Transaction
+#         fields = ['sessionId', 'initiationTranRef', 'tranRemarks', 'transactionAmount', 'settledAmount', 'feeAmount', 'vatAmount', 'currency', 'settlementId', 'sourceAccountNumber', 'sourceAccountName', 'sourceBankName', 'channelId', 'tranDateTime', 'account_number']
+
+#     def create(self, validated_data):
+#         # Extract user from validated_data
+#         user_data = validated_data.pop('User')
+#         # Extract account_number from user_data
+#         account_number = user_data.get('account_number')
+
+#         # Create the Transaction object with the extracted account_number
+#         transaction = Transaction.objects.create(account_number=account_number, **validated_data)
+        
+#         return transaction
+    
+# from rest_framework import serializers
+# from .models import Transaction
+
+# class TransactionSerializer(serializers.ModelSerializer):
+#     account_number = serializers.CharField(source='user.account_number', read_only=True)
+
+#     class Meta:
+#         model = Transaction
+#         fields = ['id','sessionId', 'initiationTranRef', 'tranRemarks', 'transactionAmount', 'settledAmount', 'feeAmount', 'vatAmount', 'currency', 'settlementId', 'sourceAccountNumber', 'sourceAccountName', 'sourceBankName', 'channelId', 'tranDateTime', 'account_number']
+#         read_only_fields = ['id']  # Ensure id field is read-only
+
+#     def create(self, validated_data):
+#         return Transaction.objects.create(**validated_data)
+from rest_framework import serializers
+from .models import Transaction
+
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
         fields = '__all__'
+
+    def create(self, validated_data):
+        settlement_id = validated_data.get('settlementId')
+        existing_transaction = Transaction.objects.filter(settlementId=settlement_id).exists()
+        
+        if existing_transaction:
+            raise serializers.ValidationError("Transaction with this settlementId already exists.")
+        
+        return Transaction.objects.create(**validated_data)

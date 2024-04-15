@@ -3,7 +3,9 @@ from rest_framework.routers import DefaultRouter
 from account import views
 from django.contrib import admin
 router = DefaultRouter()
-router.register(r'transaction', views.TransactionView, basename='transaction')
+router.register(r'transaction', views.TransactionViewSet, basename='transaction')
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("login/",views.LoginView.as_view()),
