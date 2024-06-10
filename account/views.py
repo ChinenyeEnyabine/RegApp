@@ -47,178 +47,35 @@ from .models import Transaction
 from .serializers import TransactionSerializer
 from rest_framework.response import Response
 
-# class TransactionViewSet(viewsets.ModelViewSet):
-#     queryset = Transaction.objects.all()
-#     serializer_class = TransactionSerializer
 
-#     def perform_create(self, request, *args, **kwargs):
-#         serializer = self.get_serializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-        
-#         # Perform custom logic to check settlement ID
-#         settlement_id = request.data.get('settlementId')
-#         print(settlement_id)
-#         response_data = {}
-        
-#         # Check if the settlement ID already exists in the database
-#         transactchek = Transaction.objects.filter(settlementId=settlement_id).exists()
-#         print(transactchek)
-#         if transactchek:
-
-#             response_data = {
-#                 "requestSuccessful": True,
-#                 "sessionId": request.data.get("sessionId"),
-#                 "responseMessage": "existing transaction",
-#                 "responseCode": "01"
-#             }
-#         else:
-#             # Perform additional checks here if needed
-#             # For example, check if the settlement ID is in a certain range
-#             # and consider it as a failure if it doesn't meet the criteria
-            
-#             # If the settlement ID doesn't exist, treat it as a success
-#             response_data = {
-#                 "requestSuccessful": True,
-#                 "sessionId": request.data.get("sessionId"),
-#                 "responseMessage": "success",
-#                 "responseCode": "00"
-#             }
-        
-#         return Response(response_data)
-# class TransactionViewSet(viewsets.ModelViewSet):
-#     queryset = Transaction.objects.all()
-#     serializer_class = TransactionSerializer
-
-#     def create(self, request, *args, **kwargs):
-#         serializer = self.get_serializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-        
-#         # Perform custom logic to check settlement ID
-#         settlement_id = request.data.get('settlementId')
-#         print(settlement_id)
-#         response_data = {}
-        
-#         # Check if the settlement ID already exists in the database
-#         transact_check = Transaction.objects.filter(settlementId=settlement_id).exists()
-#         print(transact_check)
-#         if transact_check:
-#             response_data = {
-#                 "requestSuccessful": True,
-#                 "sessionId": request.data.get("sessionId"),
-#                 "responseMessage": "existing transaction",
-#                 "responseCode": "01"
-#             }
-#         else:
-#             # Create the transaction object
-#             transaction_data = {
-#                 'settlementId': settlement_id,
-#                 # Add other fields as needed from the request data
-#             }
-#             # Assuming TransactionSerializer is used for creation as well
-#             new_transaction_serializer = self.get_serializer(data=transaction_data)
-#             new_transaction_serializer.is_valid(raise_exception=True)
-#             new_transaction_serializer.save()  # Save the new transaction
-#             response_data = {
-#                 "requestSuccessful": True,
-#                 "sessionId": request.data.get("sessionId"),
-#                 "responseMessage": "success",
-#                 "responseCode": "00"
-#             }
-        
-#         return Response(response_data)
-
-# from rest_framework import viewsets
-# from rest_framework.response import Response
-# from .models import Transaction
-# from .serializers import TransactionSerializer
-
-# class TransactionViewSet(viewsets.ModelViewSet):
-#     queryset = Transaction.objects.all()
-#     serializer_class = TransactionSerializer
-
-#     def create(self, request, *args, **kwargs):
-#         serializer = self.get_serializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-        
-#         # Perform custom logic to check settlement ID
-#         settlement_id = request.data.get('settlementId')
-        
-#         # Check if the settlement ID already exists in the database
-#         transact_check = Transaction.objects.filter(settlementId=settlement_id).exists()
-
-#         if transact_check:
-#             response_data = {
-#                 "requestSuccessful": True,
-#                 "sessionId": request.data.get("sessionId"),
-#                 "responseMessage": "existing transaction",
-#                 "responseCode": "01"
-#             }
-#         else:
-#             # Create the transaction object only if the settlementId doesn't exist
-#             serializer.save()
-#             response_data = {
-#                 "requestSuccessful": True,
-#                 "sessionId": request.data.get("sessionId"),
-#                 "responseMessage": "success",
-#                 "responseCode": "00"
-#             }
-        
-#         return Response(response_data)
-# from rest_framework import viewsets
-# from rest_framework.response import Response
-# from .models import Transaction
-# from .serializers import TransactionSerializer
-# from rest_framework import status
-
-# class TransactionViewSet(viewsets.ModelViewSet):
-#     queryset = Transaction.objects.all()
-#     serializer_class = TransactionSerializer
-
-#     def create(self, request, *args, **kwargs):
-#         serializer = self.get_serializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-        
-#         # Perform custom logic to check settlement ID
-#         settlement_id = request.data.get('settlementId')
-        
-#         # Check if the settlement ID already exists in the database
-#         transact_check = Transaction.objects.filter(settlementId=settlement_id).exists()
-
-#         if transact_check:
-#             response_data = {
-#                 "requestSuccessful": True,
-#                 "sessionId": request.data.get("sessionId"),
-#                 "responseMessage": "existing transaction",
-#                 "responseCode": "01"
-#             }
-#             return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
-#         else:
-#             # Create the transaction object only if the settlementId doesn't exist
-#             serializer.save()
-#             response_data = {
-#                 "requestSuccessful": True,
-#                 "sessionId": request.data.get("sessionId"),
-#                 "responseMessage": "success",
-#                 "responseCode": "00"
-#             }
-#             return Response(response_data, status=status.HTTP_201_CREATED)
 from rest_framework import viewsets
 from rest_framework.response import Response
 from django.http import JsonResponse
 from .models import Transaction
 
-# class TransactionView(viewsets.ViewSet):
 
+
+from rest_framework import viewsets
+from rest_framework.response import Response
+from .models import Transaction
+from .serializers import TransactionSerializer
+
+# class TransactionViewSet(viewsets.ModelViewSet):
+#     queryset = Transaction.objects.all()
+#     serializer_class = TransactionSerializer
 #     def create(self, request):
 #         # Extracting data from the request body
+#         serializer = self.get_serializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
 #         request_data = request.data
 #         sessionId = request_data.get("sessionId")
 #         settlementId = request_data.get("settlementId")
-#         virtualAccount = request_data.get("accountNumber")
-#         x_auth_signature = request.headers.get("X-auth-Signature")
-        
+#         virtualAccount = request_data.get("account_number")
+#         # headers = {'Content-Type': 'application/json', 'X-Auth-Signature': "BE09BEE831CF262226B426E39BD1092AF84DC63076D4174FAC78A2261F9A3D6E59744983B8326B69CDF2963FE314DFC89635CFA37A40596508DD6EAAB09402C7"}
+#         x_auth_signature = request.headers.get("X-Auth-Signature")
+#         # x_auth_signature = headers.get('X-Auth-Signature')
 #         # Check if all required data is present
-#         if not sessionId or not settlementId or not virtualAccount or not x_auth_signature:
+#         if not sessionId or not settlementId or not virtualAccount:
 #             # Return a rejected response if any required data is missing
 #             return JsonResponse({
 #                 "requestSuccessful": False,
@@ -243,83 +100,390 @@ from .models import Transaction
 #                 "responseMessage": "Rejected transaction: duplicate settlement acount",
 #                 "responseCode": "02"
 #             })
-#         else:
-#             Transaction.objects.create()
-
-
-# class TransactionViewSet(viewsets.ViewSet):
-#     def create(self, request):
-#         settlement_id = request.data.get('settlementId')
-#         if Transaction.objects.filter(settlementId=settlement_id).exists():
-#             return Response({'message': 'Existing settlement ID'}, status=status.HTTP_400_BAD_REQUEST)
-#         else:
-#             # Assuming you have a serializer for creating Transaction objects
-#             serializer = TransactionSerializer(data=request.data)
-#             if serializer.is_valid():
-#                 serializer.save()
-#                 return Response(serializer.data, status=status.HTTP_201_CREATED)
-#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-from rest_framework import viewsets
-from rest_framework.response import Response
-from .models import Transaction
-from .serializers import TransactionSerializer
-# class TransactionViewSet(viewsets.ModelViewSet):
-#     queryset = Transaction.objects.all()
-#     serializer_class = TransactionSerializer
-
-#     def create(self, request, *args, **kwargs):
-#         serializer = self.get_serializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         settlement_id = serializer.validated_data.get('settlementId')
-        
-#         # Check if transaction with settlementId already exists
-#         if Transaction.objects.filter(settlementId=settlement_id).exists():
-#             return Response({"message": "Transaction with this settlementId already exists."}, status=400)
-
 #         self.perform_create(serializer)
 #         headers = self.get_success_headers(serializer.data)
 #         return Response(serializer.data, status=201, headers=headers)
-class TransactionViewSet(viewsets.ModelViewSet):
+
+# from rest_framework import viewsets, status
+from rest_framework.permissions import IsAuthenticated
+# from rest_framework.response import Response
+# from django.http import JsonResponse
+# from account.models import Transaction
+# from account.serializers import TransactionSerializer
+
+# class TransactionViewSet(viewsets.ModelViewSet):
+#     queryset = Transaction.objects.all()
+#     serializer_class = TransactionSerializer
+#     permission_classes = [IsAuthenticated]
+
+#     def create(self, request, *args, **kwargs):
+#         try:
+#             # Extracting data from the request body
+#             serializer = self.get_serializer(data=request.data)
+#             serializer.is_valid(raise_exception=True)
+#             request_data = request.data
+
+#             # Extracting required fields
+#             sessionId = request_data.get("sessionId")
+#             settlementId = request_data.get("settlementId")
+#             virtualAccount = request.user.account_number  # Use the authenticated user's account number
+#             x_auth_signature = request.headers.get("X-Auth-Signature")
+
+#             # Expected X-auth-Signature
+#             expected_signature = "BE09BEE831CF262226B426E39BD1092AF84DC63076D4174FAC78A2261F9A3D6E59744983B8326B69CDF2963FE314DFC89635CFA37A40596508DD6EAAB09402C7"
+
+#             # Check for missing required data
+#             if not sessionId or not settlementId or not virtualAccount:
+#                 return JsonResponse({
+#                     "requestSuccessful": True,
+#                     "sessionId": "99990000554443332221",
+#                     "responseMessage": "rejected transaction",
+#                     "responseCode": "02"
+#                 })
+
+#             # Check if the X-auth-Signature matches the expected value
+#             if x_auth_signature != expected_signature:
+#                 return JsonResponse({
+#                     "requestSuccessful": True,
+#                     "sessionId": "99990000554443332221",
+#                     "responseMessage": "rejected transaction",
+#                     "responseCode": "02"
+#                 })
+
+#             # Check for duplicate settlementId
+#             if Transaction.objects.filter(settlementId=settlementId).exists():
+#                 return JsonResponse({
+#                     "requestSuccessful": True,
+#                     "sessionId": "99990000554443332221",
+#                     "responseMessage": "duplicate transaction",
+#                     "responseCode": "01"
+#                 })
+
+#             # Create the transaction
+#             serializer.save(user=request.user, account_number=virtualAccount)
+#             headers = self.get_success_headers(serializer.data)
+
+#             return Response({
+#                 "requestSuccessful": True,
+#                 "sessionId": "99990000554443332221",
+#                 "responseMessage": "success",
+#                 "responseCode": "00"
+#             }, status=status.HTTP_201_CREATED, headers=headers)
+
+#         except Exception as e:
+#             return JsonResponse({
+#                 "requestSuccessful": True,
+#                 "sessionId": "99990000554443332221",
+#                 "responseMessage": "system failure, retry",
+#                 "responseCode": "03"
+#             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# class UserTransactionViewSet(viewsets.ReadOnlyModelViewSet):
+#     serializer_class = TransactionSerializer
+#     permission_classes = [IsAuthenticated]
+
+#     def get_queryset(self):
+#         user = self.request.user
+#         return Transaction.objects.filter(user=user)
+
+
+# class AdminTransactionViewSet(viewsets.ReadOnlyModelViewSet):
+#     queryset = Transaction.objects.all()
+#     serializer_class = TransactionSerializer
+#     permission_classes = [IsAdminUser]
+
+# views.py
+# from rest_framework import viewsets, status
+# from rest_framework.permissions import IsAuthenticated
+# from rest_framework.response import Response
+# from django.http import JsonResponse
+# from account.models import Transaction
+# from account.serializers import TransactionSerializer
+# import logging
+
+# logger = logging.getLogger(__name__)
+
+# class TransactionViewSet(viewsets.ModelViewSet):
+#     queryset = Transaction.objects.all()
+#     serializer_class = TransactionSerializer
+#     # permission_classes = [IsAuthenticated]
+
+#     def create(self, request, *args, **kwargs):
+#         try:
+#             # Log the request data and headers for debugging
+#             logger.debug(f"Request data: {request.data}")
+#             logger.debug(f"Request headers: {request.headers}")
+
+#             # Extracting data from the request body
+#             serializer = self.get_serializer(data=request.data)
+#             serializer.is_valid(raise_exception=True)
+#             request_data = request.data
+
+#             # Extracting required fields
+#             sessionId = request.session.session_key  # Using the session key
+#             settlementId = request_data.get("settlementId")
+#             x_auth_signature = request.headers.get("X-Auth-Signature")
+#             logger.debug(f"Session ID: {sessionId}")
+#             logger.debug(f"Settlement ID: {settlementId}")
+#             logger.debug(f"X-Auth-Signature: {x_auth_signature}")
+
+#             # Expected X-auth-Signature
+#             expected_signature = "BE09BEE831CF262226B426E39BD1092AF84DC63076D4174FAC78A2261F9A3D6E59744983B8326B69CDF2963FE314DFC89635CFA37A40596508DD6EAAB09402C7"
+
+#             # Check for missing required data
+#             if not sessionId or not settlementId:
+#                 logger.warning("Missing required fields")
+#                 return JsonResponse({
+#                     "requestSuccessful": True,
+#                     "sessionId": str(sessionId),
+#                     "responseMessage": "rejected transaction",
+#                     "responseCode": "02"
+#                 })
+
+#             # Check if the X-auth-Signature matches the expected value
+#             if x_auth_signature != expected_signature:
+#                 logger.warning("Invalid X-Auth-Signature")
+#                 return JsonResponse({
+#                     "requestSuccessful": True,
+#                     "sessionId": str(sessionId),
+#                     "responseMessage": "rejected transaction",
+#                     "responseCode": "02"
+#                 })
+
+#             # Check for duplicate settlementId
+#             if Transaction.objects.filter(settlementId=settlementId).exists():
+#                 logger.warning("Duplicate settlementId")
+#                 return JsonResponse({
+#                     "requestSuccessful": True,
+#                     "sessionId": str(sessionId),
+#                     "responseMessage": "duplicate transaction",
+#                     "responseCode": "01"
+#                 })
+
+#             # Create the transaction
+#             transaction = serializer.save(user=request.user)
+#             headers = self.get_success_headers(serializer.data)
+#             logger.info("Transaction created successfully")
+
+#             return Response({
+#                 "requestSuccessful": True,
+#                 "sessionId": str(sessionId),
+#                 "responseMessage": "success",
+#                 "responseCode": "00"
+#             }, status=status.HTTP_201_CREATED, headers=headers)
+
+#         except Exception as e:
+#             logger.error(f"Exception in creating transaction: {str(e)}", exc_info=True)
+#             return JsonResponse({
+#                 "requestSuccessful": True,
+#                 "sessionId": request.session.session_key if request.session.session_key else None,
+#                 "responseMessage": "system failure, retry",
+#                 "responseCode": "03"
+#             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class UserTransactionViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = TransactionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Transaction.objects.filter(user=user)
+
+class AdminTransactionViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
-    def create(self, request):
-        # Extracting data from the request body
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        request_data = request.data
-        sessionId = request_data.get("sessionId")
-        settlementId = request_data.get("settlementId")
-        virtualAccount = request_data.get("account_number")
-        # headers = {'Content-Type': 'application/json', 'X-Auth-Signature': "BE09BEE831CF262226B426E39BD1092AF84DC63076D4174FAC78A2261F9A3D6E59744983B8326B69CDF2963FE314DFC89635CFA37A40596508DD6EAAB09402C7"}
-        x_auth_signature = request.headers.get("X-Auth-Signature")
-        # x_auth_signature = headers.get('X-Auth-Signature')
-        # Check if all required data is present
-        if not sessionId or not settlementId or not virtualAccount:
-            # Return a rejected response if any required data is missing
-            return JsonResponse({
-                "requestSuccessful": False,
-                "responseMessage": "Rejected transaction: Missing required data",
-                "responseCode": "02"
-            })
+    # permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated]
 
-        # Perform additional checks based on the provided requirements
-        
-        # Check if the X-auth-Signature matches the expected value
-        expected_signature = "BE09BEE831CF262226B426E39BD1092AF84DC63076D4174FAC78A2261F9A3D6E59744983B8326B69CDF2963FE314DFC89635CFA37A40596508DD6EAAB09402C7"
-        if x_auth_signature != expected_signature:
-            return JsonResponse({
-                "requestSuccessful": False,
-                "responseMessage": "Rejected transaction: Incorrect X-auth-Signature",
-                "responseCode": "02"
-            })
+# class TransactionView(viewsets.ModelViewSet):
+#     queryset = Transaction.objects.all()
+#     serializer_class = TransactionSerializer
+#     # permission_classes = [IsAuthenticated]
 
-        if Transaction.objects.filter(settlementId=settlementId).exists():
+
+from rest_framework import viewsets, status
+from rest_framework.response import Response
+from django.http import JsonResponse
+from account.models import Transaction
+from account.serializers import TransactionSerializer
+import logging
+
+logger = logging.getLogger(__name__)
+
+# class TransactionView(viewsets.ModelViewSet):
+#     queryset = Transaction.objects.all()
+#     serializer_class = TransactionSerializer
+#     # Temporarily remove authentication
+#     # permission_classes = [IsAuthenticated]
+
+#     def create(self, request, *args, **kwargs):
+#         try:
+#             # Log the request data and headers for debugging
+#             logger.debug(f"Request data: {request.data}")
+#             logger.debug(f"Request headers: {request.headers}")
+
+#             # Extracting data from the request body
+#             serializer = self.get_serializer(data=request.data)
+#             serializer.is_valid(raise_exception=True)
+#             request_data = request.data
+
+#             # Extracting required fields
+#             sessionId = request.session.session_key  # Using the session key
+#             settlementId = request_data.get("settlementId")
+#             x_auth_signature = request.headers.get("X-Auth-Signature")
+#             logger.debug(f"Session ID: {sessionId}")
+#             logger.debug(f"Settlement ID: {settlementId}")
+#             logger.debug(f"X-Auth-Signature: {x_auth_signature}")
+
+#             # Expected X-auth-Signature
+#             expected_signature = "BE09BEE831CF262226B426E39BD1092AF84DC63076D4174FAC78A2261F9A3D6E59744983B8326B69CDF2963FE314DFC89635CFA37A40596508DD6EAAB09402C7"
+
+#             # Check for missing required data
+#             if not sessionId or not settlementId:
+#                 logger.warning("Missing required fields")
+#                 return JsonResponse({
+#                     "requestSuccessful": True,
+#                     "sessionId": str(sessionId),
+#                     "responseMessage": "rejected transaction",
+#                     "responseCode": "02"
+#                 })
+
+#             # Check if the X-auth-Signature matches the expected value
+#             if x_auth_signature != expected_signature:
+#                 logger.warning("Invalid X-Auth-Signature")
+#                 return JsonResponse({
+#                     "requestSuccessful": True,
+#                     "sessionId": str(sessionId),
+#                     "responseMessage": "rejected transaction",
+#                     "responseCode": "02"
+#                 })
+
+#             # Check for duplicate settlementId
+#             if Transaction.objects.filter(settlementId=settlementId).exists():
+#                 logger.warning("Duplicate settlementId")
+#                 return JsonResponse({
+#                     "requestSuccessful": True,
+#                     "sessionId": str(sessionId),
+#                     "responseMessage": "duplicate transaction",
+#                     "responseCode": "01"
+#                 })
+
+#             # Include the account number in the transaction data
+#             transaction_data = serializer.validated_data
+#             transaction_data['accountNumber'] = request.user.account_number if request.user.is_authenticated else None
+
+#             # Create the transaction
+#             transaction = Transaction.objects.create(**transaction_data)
+#             serializer = self.get_serializer(transaction)
+#             headers = self.get_success_headers(serializer.data)
+#             logger.info("Transaction created successfully")
+
+#             return Response({
+#                 "requestSuccessful": True,
+#                 "sessionId": str(sessionId),
+#                 "responseMessage": "success",
+#                 "responseCode": "00"
+#             }, status=status.HTTP_201_CREATED, headers=headers)
+
+#         except Exception as e:
+#             logger.error(f"Exception in creating transaction: {str(e)}", exc_info=True)
+#             return JsonResponse({
+#                 "requestSuccessful": True,
+#                 "sessionId": request.session.session_key if request.session.session_key else None,
+#                 "responseMessage": "system failure, retry",
+#                 "responseCode": "03"
+#             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+from rest_framework import viewsets, status
+from rest_framework.response import Response
+from django.http import JsonResponse
+from .models import Transaction
+from .serializers import TransactionSerializer
+import logging
+
+logger = logging.getLogger(__name__)
+
+class TransactionView(viewsets.ModelViewSet):
+    queryset = Transaction.objects.all()
+    serializer_class = TransactionSerializer
+    # Temporarily remove authentication
+    # permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        try:
+            # Log the request data and headers for debugging
+            logger.debug(f"Request data: {request.data}")
+            logger.debug(f"Request headers: {request.headers}")
+
+            # Extracting data from the request body
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            request_data = serializer.validated_data
+
+            # Extracting required fields
+            sessionId = request_data.get("sessionId")
+            settlementId = request_data.get("settlementId")
+            accountNumber = request_data.get("accountNumber")
+            x_auth_signature = request.headers.get("X-Auth-Signature")
+            logger.debug(f"Session ID: {sessionId}")
+            logger.debug(f"Settlement ID: {settlementId}")
+            logger.debug(f"X-Auth-Signature: {x_auth_signature}")
+
+            # Expected X-auth-Signature
+            expected_signature = "BE09BEE831CF262226B426E39BD1092AF84DC63076D4174FAC78A2261F9A3D6E59744983B8326B69CDF2963FE314DFC89635CFA37A40596508DD6EAAB09402C7"
+
+            # Check for missing required data
+            if not accountNumber or not settlementId:
+                logger.warning("Missing required fields")
+                return JsonResponse({
+                    "requestSuccessful": True,
+                    "sessionId": str(sessionId) if sessionId else None,
+                    "responseMessage": "rejected transaction",
+                    "responseCode": "02"
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+            # Check if the X-auth-Signature matches the expected value
+            if x_auth_signature != expected_signature:
+                logger.warning("Invalid X-Auth-Signature")
+                return JsonResponse({
+                    "requestSuccessful": True,
+                    "sessionId": str(sessionId) if sessionId else None,
+                    "responseMessage": "authentication failed",
+                    "responseCode": "04"
+                }, status=status.HTTP_401_UNAUTHORIZED)
+
+            # Check for duplicate settlementId
+            if Transaction.objects.filter(settlementId=settlementId).exists():
+                logger.warning("Duplicate settlementId")
+                return JsonResponse({
+                    "requestSuccessful": True,
+                    "sessionId": str(sessionId),
+                    "responseMessage": "duplicate transaction",
+                    "responseCode": "01"
+                }, status=status.HTTP_200_OK)
+
+            # Create the transaction
+            transaction = Transaction.objects.create(**request_data)
+            serializer = self.get_serializer(transaction)
+            headers = self.get_success_headers(serializer.data)
+            logger.info("Transaction created successfully")
+
+            return Response({
+                "requestSuccessful": True,
+                "sessionId": str(sessionId),
+                "responseMessage": "success",
+                "responseCode": "00"
+            }, status=status.HTTP_201_CREATED, headers=headers)
+
+        except Exception as e:
+            logger.error(f"Exception in creating transaction: {str(e)}", exc_info=True)
             return JsonResponse({
-                "requestSuccessful": False,
-                "responseMessage": "Rejected transaction: duplicate settlement acount",
-                "responseCode": "02"
-            })
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=201, headers=headers)
+                "requestSuccessful": True,
+                "sessionId": request.data.get("sessionId") if request.data.get("sessionId") else None,
+                "responseMessage": "system failure, retry",
+                "responseCode": "03"
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+

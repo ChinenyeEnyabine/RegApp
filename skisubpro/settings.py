@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'account',
     'carbook',
-    'transactional'
+
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -71,6 +71,7 @@ MIDDLEWARE = [
 ]
 
 AUTH_USER_MODEL = "account.User"
+
 
 ROOT_URLCONF = 'skisubpro.urls'
 
