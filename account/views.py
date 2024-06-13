@@ -406,6 +406,13 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+from rest_framework import viewsets, status
+from rest_framework.response import Response
+from django.http import JsonResponse
+import logging
+
+logger = logging.getLogger(__name__)
+
 class TransactionView(viewsets.ModelViewSet):
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
@@ -435,6 +442,16 @@ class TransactionView(viewsets.ModelViewSet):
             # Expected X-auth-Signature
             expected_signature = "BE09BEE831CF262226B426E39BD1092AF84DC63076D4174FAC78A2261F9A3D6E59744983B8326B69CDF2963FE314DFC89635CFA37A40596508DD6EAAB09402C7"
 
+            # Check if the X-auth-Signature is missing or incorrect
+            if x_auth_signature != expected_signature:
+                logger.warning("Missing or invalid X-Auth-Signature")
+                return JsonResponse({
+                    "requestSuccessful": True,
+                    "sessionId": str(sessionId) if sessionId else None,
+                    "responseMessage": "rejected transaction",
+                    "responseCode": "02"
+                }, status=status.HTTP_400_BAD_REQUEST)
+
             # Check for missing required data
             if not accountNumber or not settlementId:
                 logger.warning("Missing required fields")
@@ -444,16 +461,6 @@ class TransactionView(viewsets.ModelViewSet):
                     "responseMessage": "rejected transaction",
                     "responseCode": "02"
                 }, status=status.HTTP_400_BAD_REQUEST)
-
-            # Check if the X-auth-Signature matches the expected value
-            if x_auth_signature != expected_signature:
-                logger.warning("Invalid X-Auth-Signature")
-                return JsonResponse({
-                    "requestSuccessful": True,
-                    "sessionId": str(sessionId) if sessionId else None,
-                    "responseMessage": "authentication failed",
-                    "responseCode": "04"
-                }, status=status.HTTP_401_UNAUTHORIZED)
 
             # Check for duplicate settlementId
             if Transaction.objects.filter(settlementId=settlementId).exists():
