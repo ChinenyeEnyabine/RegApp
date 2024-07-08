@@ -1,13 +1,13 @@
 # from django.contrib import admin
-from carbook import models
+# from carbook import models
 from skisub.models import BillOperation
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from carbook.models import Car, Booking
+from carbook.models import Car, Booking, Order
 from django.contrib import admin
 # from skisub.models import BillOperation
 from carbook.models import CarMake, Car, CarImage, Booking, CarModel
-from hotelbooking.models import Amenity, HotelImage, Hotel
+from hotelbooking.models import Amenity, HotelImage, Hotel, HotelOrder
 from hotelbooking.models import Booking as hotelbooking
 from account.models import Transaction
 
@@ -96,6 +96,8 @@ admin.site.register(Hotel, HotelAdmin)
 admin.site.register(HotelImage)
 admin.site.register(hotelbooking, BookingAdmin)
 admin.site.register(Transaction)
+admin.site.register(Order)
+admin.site.register(HotelOrder)
 
 
 

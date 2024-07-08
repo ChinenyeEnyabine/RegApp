@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from decimal import Decimal
 
-from account.models import Transaction
+from account.models import Transaction, User
 from .models import Booking, Car, CarImage, CarMake, CarModel
 
 from rest_framework import serializers
@@ -117,7 +117,7 @@ class CarSerializer(serializers.ModelSerializer):
 
 from rest_framework import serializers
 from .models import Booking
- # Import Wallet model if you haven't already
+from account.models import Transaction  # Import Wallet model and User model if you haven't already
 
 class CarBookingSerializer(serializers.ModelSerializer):
     class Meta:
@@ -126,6 +126,7 @@ class CarBookingSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = validated_data['user']
+        accountno = user.account_number  # Get account number from the user instance
         car = validated_data['car']
         start_date = validated_data['start_date']
         end_date = validated_data['end_date']
@@ -140,8 +141,11 @@ class CarBookingSerializer(serializers.ModelSerializer):
         total_amount = car_price * day_difference
 
         # Check if user has a wallet
-        wallet = Transaction.objects.get(user=user)
-        
+        try:
+            wallet = Transaction.objects.get(accountNumber=accountno)
+        except Transaction.DoesNotExist:
+            raise serializers.ValidationError("Wallet not found for this user.")
+
         # Check if the wallet balance is sufficient
         if wallet.settledAmount >= total_amount:
             # Update the validated_data with the calculated total_amount
@@ -155,3 +159,19 @@ class CarBookingSerializer(serializers.ModelSerializer):
             return booking
         else:
             raise serializers.ValidationError("Insufficient funds in the wallet.")
+from rest_framework import serializers
+from .models import Order, Booking
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ('id', 'user', 'booking', 'order_date', 'status', 'total_amount')
+        read_only_fields = ('total_amount',)
+
+    def create(self, validated_data):
+        user = validated_data['user']
+        booking = validated_data['booking']
+        total_amount = booking.total_amount  # Derive total amount from the booking
+
+        order = Order.objects.create(user=user, booking=booking, total_amount=total_amount, status='pending')
+        return order

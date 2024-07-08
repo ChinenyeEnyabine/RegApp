@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from account.models import Transaction
 from hotelbooking.models import Amenity, Booking, Hotel, HotelImage
 
 class AmenitySerializers(serializers.ModelSerializer):
@@ -48,6 +49,8 @@ class HotelBookingSerializer(serializers.ModelSerializer):
         return representation
 
     def create(self, validated_data):
+        user = validated_data['user']
+        accountno = user.account_number
         hotel = validated_data['hotel']
         check_in_date = validated_data['check_in_date']
         check_out_date = validated_data['check_out_date']
@@ -60,8 +63,41 @@ class HotelBookingSerializer(serializers.ModelSerializer):
         total_amount = hotel.price_per_day * total_days
 
         validated_data['total_amount'] = total_amount
+        # Check if user has a wallet
+        try:
+            wallet = Transaction.objects.get(accountNumber=accountno)
+        except Transaction.DoesNotExist:
+            raise serializers.ValidationError("Wallet not found for this user.")
 
-        booking = Booking.objects.create(**validated_data)
-        return booking
+        # Check if the wallet balance is sufficient
+        if wallet.settledAmount >= total_amount:
+            # Update the validated_data with the calculated total_amount
+            # validated_data['total_amount'] = total_amount
+
+            # Deduct the total_amount from the user's wallet
+            wallet.settledAmount -= total_amount
+            wallet.save()
+
+            booking = Booking.objects.create(**validated_data)
+            return booking
+        else:
+            raise serializers.ValidationError("Insufficient funds in the wallet.")
+from rest_framework import serializers
+from .models import HotelOrder, Booking
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HotelOrder
+        fields = ('id', 'user', 'booking', 'order_date', 'status', 'total_amount')
+        read_only_fields = ('total_amount',)
+
+    def create(self, validated_data):
+        user = validated_data['user']
+        booking = validated_data['booking']
+        total_amount = booking.total_amount  # Derive total amount from the booking
+
+        order = Order.objects.create(user=user, booking=booking, total_amount=total_amount, status='pending')
+        return order
+    
 
 
