@@ -1,24 +1,26 @@
-from rest_framework import viewsets,permissions
-from .models import Booking, Hotel, HotelOrder
-from .serializers import HotelBookingSerializer, HotelSerializers, OrderSerializer
-from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly, IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
+from rest_framework import viewsets, permissions
+from .models import Booking, Hotel, HotelOrder, RoomType
+from .serializers import BookingSerializer, HotelSerializer, OrderSerializer, RoomTypeSerializer
 
 class HotelViewSet(viewsets.ModelViewSet):
     queryset = Hotel.objects.all()
-    serializer_class = HotelSerializers
+    serializer_class = HotelSerializer
 
-class HotelBookingViewSet(viewsets.ModelViewSet):
-    # queryset = Booking.objects.all()
-    serializer_class = HotelBookingSerializer
+class RoomTypeViewSet(viewsets.ModelViewSet):
+    queryset = RoomType.objects.all()
+    serializer_class = RoomTypeSerializer
+
+class BookingViewSet(viewsets.ModelViewSet):
+    serializer_class = BookingSerializer
+
     def get_queryset(self):
-        user=self.request.user
+        user = self.request.user
         if user.is_staff:
-          return Booking.objects.all()
+            return Booking.objects.all()
         elif user.is_authenticated:
-           return Booking.objects.filter(user=user)
+            return Booking.objects.filter(user=user)
         else:
-           return Booking.objects.none()
-    # permission_classes = [IsAuthenticated]
+            return Booking.objects.none()
 
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = HotelOrder.objects.all()

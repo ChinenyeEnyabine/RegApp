@@ -22,11 +22,14 @@ from django.conf.urls.static import static
 
 from skisub import views
 router=DefaultRouter()
-router.register('billoperation',views.BillOperationViewSet)
+router.register('billoperation',views.AirtimeTransactionCreateView)
+router.register('billoperation',views.DataTransactionCreateView)
+# path('buy-airtime/', AirtimeTransactionCreateView.as_view(), name='buy-airtime'),
+#     path('buy-data/', DataTransactionCreateView.as_view(), name='buy-data'),
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls)),
+    # path('api/', include(router.urls)),
     # path("login/",views.LoginView.as_view()),
     # path("signup/",views.RegisterView.as_view()),
     # path("logout/",views.LogoutView.as_view()),
