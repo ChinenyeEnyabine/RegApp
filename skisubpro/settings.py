@@ -107,7 +107,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'USER': 'postgres',
-        'NAME': 'database-1',
+        'NAME': 'skisubdb',
         'PASSWORD': 'Skisub123456789',
         'HOST': 'database-1.chea4mmkyz0x.eu-west-1.rds.amazonaws.com',
         'PORT': '5432', 
