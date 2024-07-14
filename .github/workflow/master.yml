@@ -2,7 +2,7 @@ name: Production Build and Test
 
 on:
   push:
-    branches: [main]
+    branches: [prod]
 
 jobs:
   # test:
