@@ -50,7 +50,7 @@ class BookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Booking
         fields = ['id', 'room_type', 'check_in_date', 'check_out_date', 'total_amount']
-
+        ref_name = 'HotelBooking'
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['room_type'] = RoomTypeSerializer(instance.room_type).data
@@ -88,7 +88,7 @@ class OrderSerializer(serializers.ModelSerializer):
         model = HotelOrder
         fields = ('id', 'user', 'booking', 'order_date', 'status', 'total_amount')
         read_only_fields = ('total_amount',)
-
+        ref_name = 'HotelBookingOrder'
     def create(self, validated_data):
         user = validated_data['user']
         booking = validated_data['booking']

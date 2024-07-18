@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'skisub',
     'knox',
+    'drf_yasg',
     'flightbooking',
     'hotelbooking',
     'rest_framework',
@@ -61,6 +62,7 @@ KNOX = {
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -96,23 +98,23 @@ WSGI_APPLICATION = 'skisubpro.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'USER': 'postgres',
-#         'NAME': 'skisubdb',
-#         'PASSWORD': 'Skisub123456789',
-#         'HOST': 'skisubdb.chea4mmkyz0x.eu-west-1.rds.amazonaws.com',
-#         'PORT': '5432', 
-        
-#     },
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
 # }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'USER': 'postgres',
+        'NAME': 'skisubdb',
+        'PASSWORD': 'Skisub123456789',
+        'HOST': 'skisubdb.chea4mmkyz0x.eu-west-1.rds.amazonaws.com',
+        'PORT': '5432', 
+        
+    },
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -148,8 +150,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
-# Define the URL for serving media files during development
+
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR/ "staticfiles"
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+STATICFILES_STORAGE="whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 MEDIA_URL = '/media/'
 
 # Define the filesystem path where uploaded media files will be stored

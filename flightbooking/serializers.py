@@ -15,7 +15,7 @@ class BookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Booking
         fields = ['id', 'flight', 'adults', 'children', 'trip_type', 'departure_date', 'return_date', 'total_amount']
-
+        ref_name = 'FlightBooking'
     def create(self, validated_data):
         """
         Create and return a new Booking instance with the validated data.

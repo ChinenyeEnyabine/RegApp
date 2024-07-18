@@ -19,6 +19,7 @@ from django.urls import path,include
 from rest_framework.routers import DefaultRouter
 from django.conf import settings
 from django.conf.urls.static import static
+from docs.swagger_config import urlpatterns as docs_urlpatterns
 
 from skisub import views
 router=DefaultRouter()
@@ -40,10 +41,13 @@ urlpatterns = [
     path('car/',include('carbook.urls')),
     path('hotel/', include('hotelbooking.urls')),
     path('hotelad/', include('hotelbooking.urls')),
+    path('docs/', include(docs_urlpatterns)),
    
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    
 admin.site.site_header = "Skisub Administrator"
 admin.site.site_title = "Skisub Administrator"
 admin.site.index_title = "Welcome to the Skisub Administration"

@@ -167,7 +167,7 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = ('id', 'user', 'booking', 'order_date', 'status', 'total_amount')
         read_only_fields = ('total_amount',)
-
+        ref_name = 'CarBookOrder'
     def create(self, validated_data):
         user = validated_data['user']
         booking = validated_data['booking']
