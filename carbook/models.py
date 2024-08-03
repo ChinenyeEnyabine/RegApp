@@ -22,29 +22,74 @@ class CarImage(models.Model):
     
 
 class Car(models.Model):
-    
-    model = models.ForeignKey(CarModel, on_delete=models.CASCADE, related_name='cars')
+    model = models.ForeignKey(CarModel, on_delete=models.CASCADE)
     year = models.PositiveIntegerField()
     available = models.BooleanField(default=True)
-    price_per_day = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    image = models.ManyToManyField(CarImage, related_name='cars_images')  # Specify a unique related_name here
+    price_per_day = models.DecimalField(max_digits=10, decimal_places=2)
     
+    # Assuming these fields are defined in the Car model
+    TRANSMISSION_CHOICES = [
+        ('automatic', 'Automatic'),
+        ('manual', 'Manual')
+    ]
+    FUEL_TYPE_CHOICES = [
+        ('petrol', 'Petrol'),
+        ('diesel', 'Diesel'),
+        ('electric', 'Electric')
+    ]
+
+    transmission = models.CharField(max_length=20, choices=TRANSMISSION_CHOICES)
+    fuel_type = models.CharField(max_length=20, choices=FUEL_TYPE_CHOICES)
+    number_of_passengers = models.PositiveIntegerField()
+    number_of_doors = models.PositiveIntegerField()
+    max_power_hp = models.PositiveIntegerField()
+    top_speed_mph = models.PositiveIntegerField()
+    air_conditioning = models.BooleanField(default=False)
+    
+    image = models.ManyToManyField('CarImage', related_name='cars', blank=True)
+
     def __str__(self):
-        return f'{self.model.make.name} --- {self.model.name}'
+        return f"{self.model.name} ({self.year})"
+
+# class Booking(models.Model):
+#     user=models.ForeignKey(User,on_delete=models.CASCADE)
+#     car = models.ForeignKey(Car, on_delete=models.CASCADE)
+#     start_date = models.DateField(default=date.today)
+#     end_date = models.DateField(default=date.today)
+#     pickup_time = models.TimeField(default=time(8, 0))  # Set default pickup time to 8:00 AM
+#     dropoff_time = models.TimeField(default=time(17, 0))  # Set default dropoff time to 5:00 PM
+#     age = models.IntegerField(default=18) 
+#     is_approved = models.BooleanField(default=False)
+#     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+#     def __str__(self):
+#         return f'Booking for {self.car.model.make.name} --- {self.car.model.name}'
+# class Order(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
+#     order_date = models.DateTimeField(auto_now_add=True)
+#     status = models.CharField(max_length=20, choices=[('pending', 'Pending'), ('confirmed', 'Confirmed'), ('cancelled', 'Cancelled')])
+#     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+
+#     def __str__(self):
+#         return f"Order {self.id} - {self.user.username}"
 
 class Booking(models.Model):
-    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     car = models.ForeignKey(Car, on_delete=models.CASCADE)
     start_date = models.DateField(default=date.today)
     end_date = models.DateField(default=date.today)
-    pickup_time = models.TimeField(default=time(8, 0))  # Set default pickup time to 8:00 AM
-    dropoff_time = models.TimeField(default=time(17, 0))  # Set default dropoff time to 5:00 PM
-    age = models.IntegerField(default=18) 
-    is_approved = models.BooleanField(default=False)
+    pickup_time = models.TimeField(default=time(8, 0))
+    dropoff_time = models.TimeField(default=time(17, 0))
+    age = models.IntegerField(default=18)
+    is_approved = models.BooleanField(default=True)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    pickup_location = models.CharField(max_length=255, default='Unknown')
+    dropoff_location = models.CharField(max_length=255, default='Unknown')
 
     def __str__(self):
         return f'Booking for {self.car.model.make.name} --- {self.car.model.name}'
+
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE)

@@ -9,7 +9,7 @@ router = DefaultRouter()
 # router.register(r'carmodel', CarModelViewSet, basename='carmodel')
 router.register(r'cars', CarViewSet, basename='car')
 router.register(r'bookings', CarBookingViewSet, basename='carbooking')
-router.register(r'orders', OrderViewSet)
+router.register(r'orders', OrderViewSet, basename='order')
 
 urlpatterns = [
     # Your other URL patterns go here if you have any

@@ -12,6 +12,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("login/",views.LoginView.as_view()),
     path("signup/",views.RegisterView.as_view()),
+    path("listreguser/",views.RegisterList.as_view()),
+    
     # path("logout/",views.LogoutView.as_view()),
     # path("transaction/",views.TransactionView.as_view()),
     path('', include(router.urls)),

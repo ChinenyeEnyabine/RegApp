@@ -15,6 +15,10 @@ class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
+class RegisterList(generics.ListAPIView):
+    queryset = User.objects.all()
+    # permission_classes = (AllowAny,)
+    serializer_class = RegisterSerializer
 class LoginView(APIView):
     permission_classes = []
 
@@ -65,7 +69,8 @@ class UserTransactionViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        return Transaction.objects.filter(user=user)
+        user_account=user.account_number
+        return Transaction.objects.filter(accountNumber=user_account)
 
 class AdminTransactionViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Transaction.objects.all()
