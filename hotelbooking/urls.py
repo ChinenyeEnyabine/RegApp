@@ -7,8 +7,8 @@ from hotelbooking.views import BookingViewSet, HotelViewSet, OrderViewSet, RoomT
 router = routers.DefaultRouter()
 router.register(r'hotels', HotelViewSet)
 router.register(r'hotelbooking', BookingViewSet, basename='booking')
-router.register(r'orders', OrderViewSet)
-router.register(r'roomtypes', RoomTypeViewSet)
+router.register(r'orders', OrderViewSet, basename='Hotelorder')
+router.register(r'roomtypes', RoomTypeViewSet, basename='Roomtype')
 
 urlpatterns = [
     # Your other URL patterns

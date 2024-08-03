@@ -181,12 +181,12 @@ class CarBookingSerializer(serializers.ModelSerializer):
     
 class OrderSerializer(serializers.ModelSerializer):
     booking = CarBookingSerializer()  # Nested serializer to display booking details
-
+    
     class Meta:
         model = Order
         fields = ('id', 'user', 'booking', 'order_date', 'status', 'total_amount')
         read_only_fields = ('total_amount', 'order_date', 'status')
-
+        ref_name = 'CarBookingOrder'
     def validate(self, data):
         # Validate booking and ensure funds are available
         booking_data = data.get('booking')
