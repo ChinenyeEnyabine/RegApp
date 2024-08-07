@@ -1,9 +1,13 @@
 from django.shortcuts import render
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, filters
+
+from carbook.filters import CarFilter
 from .models import Car, Booking, CarImage, CarMake, CarModel, Order
+from django_filters.rest_framework import DjangoFilterBackend
 from .serializers import (
     CarBookingSerializer, 
-    CarImageSerializer, 
+    CarImageSerializer,
+    CarOrderList, 
     CarSerializer, 
     CarMakeSerializer, 
     CarModelSerializer,
@@ -29,6 +33,14 @@ class CarViewSet(viewsets.ModelViewSet):
     queryset = Car.objects.all()
     serializer_class = CarSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ['model', 'price_per_day']
+    search_fields = ['name']
+    filterset_class = CarFilter
+    search_fields = ['model__name']
+
+    def get_queryset(self):
+        return super().get_queryset().filter(available=True)
 
 # class CarBookingViewSet(viewsets.ModelViewSet):
 #     serializer_class = CarBookingSerializer
@@ -94,3 +106,14 @@ class OrderViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         # Assign the user to the order
         serializer.save(user=self.request.user)
+class OrderListViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = CarOrderList
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return Order.objects.all()
+        elif user.is_authenticated:
+            return Order.objects.filter(user=user)
+        return Order.objects.none()

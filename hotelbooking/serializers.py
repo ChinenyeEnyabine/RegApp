@@ -99,28 +99,30 @@ class HotelSerializer(serializers.ModelSerializer):
 #         return order
 
 class BookingSerializer(serializers.ModelSerializer):
-    room_type = RoomTypeSerializer()  # Nest RoomTypeSerializer
+    # room_type = RoomTypeSerializer()  # Nest RoomTypeSerializer
 
     class Meta:
         model = Booking
-        fields = ['id', 'room_type', 'check_in_date', 'check_out_date', 'total_amount']
+        fields = ['id', 'room_type', 'check_in_date', 'check_out_date', 'check_in_time','check_out_time', 'total_amount','guest']
 
-    def to_representation(self, instance):
-        """Custom representation to include room type details."""
-        representation = super().to_representation(instance)
-        representation['room_type'] = RoomTypeSerializer(instance.room_type).data
-        return representation
+    # def to_representation(self, instance):
+    #     """Custom representation to include room type details."""
+    #     representation = super().to_representation(instance)
+    #     representation['room_type'] = RoomTypeSerializer(instance.room_type).data
+    #     return representation
 
     def create(self, validated_data):
-        room_type_data = validated_data.pop('room_type')
-        room_type = RoomType.objects.get(id=room_type_data['id'])
-        
+        # room_type_data = validated_data.pop('room_type')
+        # room_type = RoomType.objects.get(id=room_type_data['id'])
+        room_type = validated_data['room_type']
         check_in_date = validated_data['check_in_date']
         check_out_date = validated_data['check_out_date']
+        
 
         # Calculate total days and amount
         delta = check_out_date - check_in_date
-        total_days = delta.days
+        # total_days = delta.days
+        total_days = delta.days if delta.days > 0 else 1
         total_amount = room_type.price_per_day * total_days
 
         validated_data['total_amount'] = total_amount
@@ -130,31 +132,64 @@ class BookingSerializer(serializers.ModelSerializer):
         return booking
 
 class OrderSerializer(serializers.ModelSerializer):
-    booking = BookingSerializer()  # Use BookingSerializer to nest the booking details
+    # booking = BookingSerializer()  # Use BookingSerializer to nest the booking details
    
     class Meta:
         model = HotelOrder
         fields = ('id', 'user', 'booking', 'order_date', 'status', 'total_amount')
         read_only_fields = ('total_amount',)
         ref_name = 'HotelBookingOrder'
-    def create(self, validated_data):
-        booking_data = validated_data.pop('booking')
-        booking = Booking.objects.create(**booking_data)
+    # def create(self, validated_data):
+        
+    #     user = validated_data['user']
+    #     booking=validated_data['booking']
+    #     accountno = user.account_number
+    #     total_amount = booking.total_amount  # Derive total amount from the booking
+    
 
+    #     try:
+    #         wallet = Transaction.objects.get(accountNumber=accountno)
+    #     except accountno.DoesNotExist:
+    #         raise serializers.ValidationError("Wallet not found for this user.")
+       
+    #     if wallet.settledAmount >= total_amount:
+    #         wallet.settledAmount -= total_amount
+    #         wallet.save()
+    #     else:
+    #         raise serializers.ValidationError("Insufficient funds in the wallet.")
+        
+    #     order = HotelOrder.objects.create(user=user, booking=booking, total_amount=total_amount, **validated_data)
+    #     return order
+    def create(self, validated_data):
         user = validated_data['user']
+        booking = validated_data['booking']
         accountno = user.account_number
         total_amount = booking.total_amount  # Derive total amount from the booking
+
+        print(f"Account Number: {accountno}")
+        print(f"Total Amount: {total_amount}")
 
         try:
             wallet = Transaction.objects.get(accountNumber=accountno)
         except Transaction.DoesNotExist:
-            raise serializers.ValidationError("Wallet not found for this user.")
-       
+            raise serializers.ValidationError("you don't have transaction yet.")
+    
+        print(f"Wallet Found: {wallet}")
+
         if wallet.settledAmount >= total_amount:
             wallet.settledAmount -= total_amount
             wallet.save()
         else:
             raise serializers.ValidationError("Insufficient funds in the wallet.")
         
-        order = HotelOrder.objects.create(user=user, booking=booking, total_amount=total_amount, **validated_data)
+        order = HotelOrder.objects.create(user=user, booking=booking, total_amount=total_amount)
         return order
+    
+class HotelOrderSerializer(serializers.ModelSerializer):
+    booking = BookingSerializer()  # Use BookingSerializer to nest the booking details
+   
+    class Meta:
+        model = HotelOrder
+        fields = ('id', 'user', 'booking', 'order_date', 'status', 'total_amount')
+        read_only_fields = ('total_amount',)
+        ref_name = 'HotelBookingOrderlist'

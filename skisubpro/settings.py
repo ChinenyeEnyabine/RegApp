@@ -48,9 +48,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'account',
     'carbook',
+    'django_filters'
 
 ]
 REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'knox.auth.TokenAuthentication',
         # ... other authentication classes if needed

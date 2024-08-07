@@ -130,7 +130,7 @@ class CarSerializer(serializers.ModelSerializer):
 #             raise serializers.ValidationError("Insufficient funds in the wallet.")
 #         return order
 class CarBookingSerializer(serializers.ModelSerializer):
-    car = CarSerializer()  # Nested serializer to display car details
+    # car = CarSerializer()  # Nested serializer to display car details
 
     class Meta:
         model = Booking
@@ -165,13 +165,14 @@ class CarBookingSerializer(serializers.ModelSerializer):
         car = validated_data['car']
         start_date = validated_data['start_date']
         end_date = validated_data['end_date']
-        day_difference = (end_date - start_date).days
-
+        day_difference =(end_date - start_date).days
+        total_days= day_difference if day_difference > 0 else 1
+        # total_days = delta.days if delta.days > 0 else 1
         # Get the price from the car associated with the booking
         car_price = car.price_per_day
 
         # Calculate the total_amount based on the price and day difference
-        total_amount = car_price * day_difference
+        total_amount = car_price * total_days
 
         # Assign calculated total amount and create booking
         validated_data['total_amount'] = total_amount
@@ -180,51 +181,36 @@ class CarBookingSerializer(serializers.ModelSerializer):
         return booking
     
 class OrderSerializer(serializers.ModelSerializer):
-    booking = CarBookingSerializer()  # Nested serializer to display booking details
+    # booking = CarBookingSerializer()  # Nested serializer to display booking details
     
     class Meta:
         model = Order
         fields = ('id', 'user', 'booking', 'order_date', 'status', 'total_amount')
         read_only_fields = ('total_amount', 'order_date', 'status')
         ref_name = 'CarBookingOrder'
-    def validate(self, data):
-        # Validate booking and ensure funds are available
-        booking_data = data.get('booking')
-        user = self.context['request'].user
+   
+    def create(self, validated_data):
+        user = validated_data['user']
+        booking = validated_data['booking']
         accountno = user.account_number
+        total_amount = booking.total_amount  # Derive total amount from the booking
 
-        # Fetch booking instance
-        try:
-            booking = Booking.objects.get(id=booking_data['id'])
-        except Booking.DoesNotExist:
-            raise serializers.ValidationError("Booking not found.")
+        print(f"Account Number: {accountno}")
+        print(f"Total Amount: {total_amount}")
 
-        # Fetch transaction wallet
         try:
             wallet = Transaction.objects.get(accountNumber=accountno)
         except Transaction.DoesNotExist:
-            raise serializers.ValidationError("Wallet not found for this user.")
+            raise serializers.ValidationError("you don't have transaction yet.")
+    
+        print(f"Wallet Found: {wallet}")
 
-        # Check wallet balance
-        if wallet.settledAmount < booking.total_amount:
+        if wallet.settledAmount >= total_amount:
+            wallet.settledAmount -= total_amount
+            wallet.save()
+        else:
             raise serializers.ValidationError("Insufficient funds in the wallet.")
-
-        return data
-
-    def create(self, validated_data):
-        user = validated_data['user']
-        booking_data = validated_data['booking']
-        booking = Booking.objects.get(id=booking_data['id'])
-
-        # Check if user has a wallet
-        accountno = user.account_number
-        wallet = Transaction.objects.get(accountNumber=accountno)
-
-        # Deduct the total_amount from the user's wallet
-        wallet.settledAmount -= booking.total_amount
-        wallet.save()
-
-        # Create order with derived total amount
+        
         order = Order.objects.create(
             user=user,
             booking=booking,
@@ -237,3 +223,13 @@ class OrderSerializer(serializers.ModelSerializer):
         booking.save()
 
         return order
+    
+   
+class CarOrderList(serializers.ModelSerializer):
+     booking = CarBookingSerializer()
+     class Meta:
+        model = Order
+        fields = ('id', 'user', 'booking', 'order_date', 'status', 'total_amount')
+        read_only_fields = ('total_amount', 'order_date', 'status')
+        ref_name = 'CarBookingListOrder'
+

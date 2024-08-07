@@ -1,3 +1,4 @@
+from datetime import time
 from django.db import models
 from django.forms import ValidationError
 from account.models import User
@@ -21,34 +22,7 @@ class Hotel(models.Model):
     def __str__(self):
         return self.name
 
-# class RoomType(models.Model):
-#     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='room_types')
-#     name = models.CharField(max_length=255)
-#     price_per_day = models.DecimalField(max_digits=10, decimal_places=2)
-#     available = models.BooleanField(default=True)
 
-#     def __str__(self):
-#         return f"{self.name} at {self.hotel.name}"
-
-# class Booking(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='bookings')
-#     room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE)
-#     check_in_date = models.DateField()
-#     check_out_date = models.DateField()
-#     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-
-#     def __str__(self):
-#         return f"Booking at {self.room_type.hotel.name} - {self.room_type.name}"
-
-# class HotelOrder(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
-#     order_date = models.DateTimeField(auto_now_add=True)
-#     status = models.CharField(max_length=20, choices=[('pending', 'Pending'), ('confirmed', 'Confirmed'), ('cancelled', 'Cancelled')])
-#     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
-
-#     def __str__(self):
-#         return f"Order {self.id} - {self.user.username}"
 class RoomType(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='room_types')
     name = models.CharField(max_length=255)
@@ -66,7 +40,10 @@ class Booking(models.Model):
     room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE)
     check_in_date = models.DateField()
     check_out_date = models.DateField()
+    check_in_time = models.TimeField(default=time(0, 0))  # 12:00 AM
+    check_out_time = models.TimeField(default=time(23, 59))
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    guest=models.IntegerField(default=1)
 
     def __str__(self):
         return f"Booking at {self.room_type.hotel.name} - {self.room_type.name}"

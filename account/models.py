@@ -89,27 +89,6 @@ class User(AbstractUser):
         return self.email
 
 
-# class Transaction(models.Model):
-#     # user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='transactions',blank=True, null=True)
-#     initiationTranRef = models.CharField(max_length=50, blank=True)
-#     account_number = models.CharField(max_length=20)
-#     tranRemarks = models.CharField(max_length=255, blank=True)
-#     transactionAmount = models.DecimalField(max_digits=15, decimal_places=2)
-#     settledAmount = models.DecimalField(max_digits=15, decimal_places=2)
-#     feeAmount = models.DecimalField(max_digits=15, decimal_places=2)
-#     vatAmount = models.DecimalField(max_digits=15, decimal_places=2)
-#     currency = models.CharField(max_length=3)
-#     settlementId = models.CharField(max_length=50, unique=True)
-#     sourceAccountNumber = models.CharField(max_length=20, blank=True)
-#     sourceAccountName = models.CharField(max_length=255, blank=True)
-#     sourceBankName = models.CharField(max_length=255, blank=True)
-#     channelId = models.CharField(max_length=50, blank=True)
-#     tranDateTime = models.DateTimeField()
-
-#     def __str__(self):
-#         return self.account_number
-# from django.db import models
-
 class Transaction(models.Model):
     sessionId = models.CharField(max_length=100)
     accountNumber = models.CharField(max_length=20)
