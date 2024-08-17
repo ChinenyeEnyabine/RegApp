@@ -1,0 +1,11 @@
+{% extends 'regulations/base.html' %}
+
+{% block content %}
+  <h2>{{ regulator.name }}</h2>
+  <p><strong>Jurisdiction:</strong> {{ regulator.jurisdiction }}</p>
+  <p><strong>Address:</strong> {{ regulator.address }}</p>
+  <p><strong>Phone No:</strong> {{ regulator.phone_no }}</p>
+  <p><strong>Regulatory Scope:</strong> {{ regulator.regulatory_scope }}</p>
+  <p><strong>Legal Documents:</strong> {{ regulator.legal_documents }}</p>
+  <a href="{% url 'regulator_list' %}">Back to Regulator List</a>
+{% endblock %}

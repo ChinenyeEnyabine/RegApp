@@ -1,0 +1,150 @@
+{% extends "regulations/base.html" %}
+
+{% block title %}{{ regulation.title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <!-- Regulation Title -->
+        <h1 class="my-4 regulation-title">{{ regulation.title }}</h1>
+        <p class="lead regulation-description">{{ regulation.description | safe }}</p>
+        
+        <!-- Regulation Details List -->
+        <ul class="list-group mb-4 regulation-details-list">
+            <li class="list-group-item regulation-detail-item">
+                <strong class="text-primary">Regulators:</strong>
+                {% if regulation.regulators.all %}
+                    {% for regulator in regulation.regulators.all %}
+                        {{ regulator.name }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                {% else %}
+                    N/A
+                {% endif %}
+            </li>
+            <li class="list-group-item regulation-detail-item">
+                <strong class="text-primary">Jurisdictions:</strong>
+                {% if regulation.regulators.all %}
+                    {% for regulator in regulation.regulators.all %}
+                        {{ regulator.jurisdiction }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                {% else %}
+                    N/A
+                {% endif %}
+            </li>
+            <li class="list-group-item regulation-detail-item">
+                <strong class="text-primary">Industry Sector:</strong> {{ regulation.industry_sector.name }}
+            </li>
+            <li class="list-group-item regulation-detail-item">
+                <strong class="text-primary">Regulation Type:</strong> {{ regulation.regulation_type.name }}
+            </li>
+            <li class="list-group-item regulation-detail-item">
+                <strong class="text-primary">Technology:</strong> {{ regulation.technology.name }}
+            </li>
+            <li class="list-group-item regulation-detail-item">
+                <strong class="text-primary">Official Email:</strong> {{ regulation.email }}
+            </li>
+            {% if regulation.url %}
+            <li class="list-group-item regulation-detail-item">
+                <strong class="text-primary">Official Website:</strong>
+                <a href="{{ regulation.url }}" class="text-link">{{ regulation.url }}</a>
+            </li>
+            {% else %}
+            <li class="list-group-item regulation-detail-item">
+                <strong class="text-primary">Official Website:</strong> None
+            </li>
+            {% endif %}
+            <li class="regulation-detail-item">
+                <strong class="text-primary">Regulatory Details:</strong> {{ regulation.regulatorydetails| safe }}
+            </li>
+        </ul>
+
+        <!-- Buttons -->
+        <a href="{% url 'regulation_list' %}" class="btn btn-secondary mt-3 back-button">Back to Regulations</a>
+        <a href="{% url 'regulation_detail_pdf' regulation.pk %}" class="btn btn-primary mt-3 download-button">Download as PDF</a>
+    </div>
+</div>
+
+<style>
+    /* General Page Styles */
+    body {
+        background-color: #f7f7f7; /* Light ash for the background */
+        color: #333; /* Dark grey for text */
+        font-family: 'Arial', sans-serif;
+    }
+
+    .regulation-title {
+        color: #0056b3; /* Blue for the regulation title */
+        font-weight: bold;
+        font-size: 2em;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .regulation-description {
+        color: #666; /* Medium grey for description text */
+        font-size: 1.1em;
+        text-align: justify;
+        margin-bottom: 20px;
+    }
+
+    .regulation-details-list {
+        background-color: #fff; /* White background for the list */
+        border-radius: 6px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        padding: 20px;
+    }
+
+    .regulation-detail-item {
+        background-color: #f8f9fa; /* Light grey for list items */
+        border: none; /* Remove borders */
+        padding: 15px 20px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+    }
+
+    .regulation-detail-item:hover {
+        background-color: #e9ecef; /* Slightly darker grey on hover */
+    }
+
+    .text-primary {
+        color: #0056b3; /* Blue for primary text elements */
+    }
+
+    .text-link {
+        color: #0056b3; /* Blue for links */
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .text-link:hover {
+        color: #004085; /* Darker blue on hover */
+    }
+
+    .btn-secondary {
+        background-color: #6c757d; /* Grey for secondary button */
+        border: none;
+        color: #fff;
+        padding: 8px 15px;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268; /* Darker grey on hover */
+    }
+
+    .btn-primary {
+        background-color: #0056b3; /* Blue for primary button */
+        border: none;
+        color: #fff;
+        padding: 8px 15px;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #004085; /* Darker blue on hover */
+    }
+</style>
+{% endblock %}

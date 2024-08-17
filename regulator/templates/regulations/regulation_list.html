@@ -1,0 +1,127 @@
+{% extends "regulations/base.html" %}
+
+{% block title %}Regulation{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+
+        <form method="get" action="{% url 'regulation_list' %}" class="form-inline mb-4">
+            <input type="text" name="q" class="form-control mr-2 search-input" placeholder="find regulation" style="flex-grow: 1;" value="{{ query }}">
+            <button type="submit" class="btn btn-primary search-button">Search</button>
+        </form>
+
+         <!--Filter Form-->
+        <form method="get" action="{% url 'regulation_list' %}" class="mb-4">
+            <div class="form-row filter-form-row">
+                <div class="form-group col-md-3">
+                    <label for="regulation_type" class="form-label">Regulation Type</label>
+                    <select id="regulation_type" name="regulation_type" class="form-control select-input">
+                        <option value="">-- Select Regulation Type --</option>
+                        {% for type in regulation_types %}
+                            <option value="{{ type.id }}" {% if type.id|stringformat:"s" == request.GET.regulation_type %}selected{% endif %}>{{ type.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="jurisdiction" class="form-label">Jurisdiction</label>
+                    <select id="jurisdiction" name="jurisdiction" class="form-control select-input">
+                        <option value="">-- Select Jurisdiction --</option>
+                        {% for jurisdiction in jurisdictions %}
+                            <option value="{{ jurisdiction }}" {% if jurisdiction == request.GET.jurisdiction %}selected{% endif %}>{{ jurisdiction }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="industry_sector" class="form-label">Industry Sector</label>
+                    <select id="industry_sector" name="industry_sector" class="form-control select-input">
+                        <option value="">-- Select Industry Sector --</option>
+                        {% for sector in industry_sectors %}
+                            <option value="{{ sector.id }}" {% if sector.id|stringformat:"s" == request.GET.industry_sector %}selected{% endif %}>{{ sector.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="regulator" class="form-label">Regulator</label>
+                    <select id="regulator" name="regulator" class="form-control select-input">
+                        <option value="">-- Select Regulator --</option>
+                        {% for regulator in regulators %}
+                            <option value="{{ regulator.id }}" {% if regulator.id|stringformat:"s" == request.GET.regulator %}selected{% endif %}>{{ regulator.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3 filter-button">Filter</button>
+        </form>
+
+         <!--Regulations List-->
+        <div class="list-group regulation-list">
+            {% for regulation in page_obj %}
+                <a href="{% url 'regulation_detail' regulation.pk %}" class="list-group-item mb-2 shadow-sm regulation-item" style="text-decoration: none; color: inherit;">
+                    <h5 class="mb-1 regulation-title">{{ regulation.title }}</h5>
+                    <p class="mb-1 regulation-details">{{ regulation.regulatorydetails|safe|truncatewords:40|linebreaksbr }}</p>
+                    <div class="mt-3">
+                        <div class="row regulation-info">
+                            <div class="col-md-3">
+                                <p><strong>Regulation Type:</strong> {{ regulation.regulation_type.name }}</p>
+                            </div>
+                            <div class="col-md-3">
+                                <p><strong>Jurisdictions:</strong>
+                                    {% if regulation.regulators.all %}
+                                        {% for regulator in regulation.regulators.all %}
+                                            {{ regulator.jurisdiction }}{% if not forloop.last %}, {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        N/A
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="col-md-3">
+                                <p><strong>Industry Sector:</strong> {{ regulation.industry_sector.name }}</p>
+                            </div>
+                            <div class="col-md-3">
+                                <p><strong>Regulators:</strong>
+                                    {% if regulation.regulators.all %}
+                                        {% for regulator in regulation.regulators.all %}
+                                            {{ regulator.name }}{% if not forloop.last %}, {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        N/A
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+
+         <!--Pagination-->
+        <nav aria-label="Page navigation example" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item"><a class="btn btn-outline-primary" href="?{% if query %}q={{ query }}&{% endif %}page=1">First</a></li>
+                    <li class="page-item"><a class="btn btn-outline-primary" href="?{% if query %}q={{ query }}&{% endif %}page={{ page_obj.previous_page_number }}">Previous</a></li>
+                {% else %}
+                    <li class="page-item disabled"><a class="btn btn-outline-secondary" href="#">First</a></li>
+                    <li class="page-item disabled"><a class="btn btn-outline-secondary" href="#">Previous</a></li>
+                {% endif %}
+                <li class="page-item disabled"><a class="btn btn-outline-secondary" href="#">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a></li>
+                {% if page_obj.has_next %}
+                    <li class="page-item"><a class="btn btn-outline-primary" href="?{% if query %}q={{ query }}&{% endif %}page={{ page_obj.next_page_number }}">Next</a></li>
+                    <li class="page-item"><a class="btn btn-outline-primary" href="?{% if query %}q={{ query }}&{% endif %}page={{ page_obj.paginator.num_pages }}">Last</a></li>
+                {% else %}
+                    <li class="page-item disabled"><a class="btn btn-outline-secondary" href="#">Next</a></li>
+                    <li class="page-item disabled"><a class="btn btn-outline-secondary" href="#">Last</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+{% endblock %}
+
+
+
+

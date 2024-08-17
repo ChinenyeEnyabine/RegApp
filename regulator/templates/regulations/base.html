@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}RegAccess Project Administration{% endblock %}</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Overall Page Styles */
+        body {
+            background-color: #f2f2f2; /* Light ash background for the entire page */
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            color: #333; /* Dark grey for general text */
+            line-height: 1.6;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color: #007bff !important; /* Blue background for navbar */
+            border-bottom: 3px solid #0056b3; /* Darker blue bottom border for emphasis */
+        }
+
+        .navbar-brand, .nav-link {
+            color: #fff !important; /* White text for brand and links */
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: color 0.3s ease; /* Smooth transition for hover effects */
+        }
+
+        .navbar-brand:hover, .nav-link:hover {
+            color: #e2e2e2 !important; /* Slightly lighter shade on hover */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        }
+
+        /* Container Styles */
+        .container {
+            background-color: #ffffff; /* White background for main content */
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for the main content box */
+            margin-top: 20px;
+        }
+
+        /* Button Styles */
+        .btn-primary {
+            background-color: #007bff; /* Primary blue for buttons */
+            border-color: #007bff;
+            color: #fff;
+            font-weight: bold;
+            transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth transition for hover */
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+            border-color: #004085;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Shadow effect on hover */
+        }
+
+        /* List Group Item Styles */
+        .list-group-item {
+            background-color: #f8f9fa; /* Light grey for list items */
+            border: 1px solid #007bff; /* Blue border for list items */
+            color: #555; /* Medium grey for list item text */
+            transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover */
+        }
+
+        .list-group-item:hover {
+            background-color: #e9ecef; /* Slightly darker grey on hover */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Shadow effect on hover */
+        }
+
+        .list-group-item strong {
+            color: #007bff; /* Blue for emphasized text within list items */
+            font-weight: bold;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px; /* Reduced padding for smaller screens */
+                margin-top: 10px;
+            }
+
+            .navbar-brand, .nav-link {
+                font-size: 1em; /* Slightly smaller text on mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="{% url 'regulation_list' %}">RegAccess</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'regulation_list' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'regulator_list' %}">Regulators</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <div class="container mt-4">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- JavaScript and Bootstrap Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
