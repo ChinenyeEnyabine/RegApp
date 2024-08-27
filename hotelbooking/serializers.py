@@ -103,7 +103,7 @@ class BookingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Booking
-        fields = ['id', 'room_type', 'check_in_date', 'check_out_date', 'check_in_time','check_out_time', 'total_amount','guest']
+        fields = ['id','user', 'room_type', 'check_in_date', 'check_out_date', 'check_in_time','check_out_time', 'total_amount','guest']
 
     # def to_representation(self, instance):
     #     """Custom representation to include room type details."""
@@ -130,6 +130,12 @@ class BookingSerializer(serializers.ModelSerializer):
 
         booking = Booking.objects.create(**validated_data)
         return booking
+class ListHotelBookingSerializer(serializers.ModelSerializer):
+    room_type = RoomTypeSerializer()  # Nest RoomTypeSerializer
+
+    class Meta:
+        model = Booking
+        fields = ['id', 'room_type', 'check_in_date', 'check_out_date', 'check_in_time','check_out_time', 'total_amount','guest']
 
 class OrderSerializer(serializers.ModelSerializer):
     # booking = BookingSerializer()  # Use BookingSerializer to nest the booking details

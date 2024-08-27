@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import  CarBookingViewSet,  CarViewSet, OrderListViewSet, OrderViewSet
+from .views import  CarBookingViewSet,  CarViewSet, ListCarBookingViewSet, OrderListViewSet, OrderViewSet
 
 # Create a router and register the viewsets with basename
 router = DefaultRouter()
@@ -11,6 +11,8 @@ router.register(r'cars', CarViewSet, basename='car')
 router.register(r'bookings', CarBookingViewSet, basename='carbooking')
 router.register(r'orders', OrderViewSet, basename='order')
 router.register(r'listcarorders', OrderListViewSet, basename='listorder')
+router.register(r'listcarbooking', ListCarBookingViewSet, basename='listcarbooking')
+
 
 
 urlpatterns = [

@@ -70,7 +70,7 @@ class HotelOrder(models.Model):
             ('confirmed', 'Confirmed'),
             ('cancelled', 'Cancelled')
         ],
-        default='pending'  # Default status to 'pending'
+        default='confirmed'  # Default status to 'pending'
     )
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
 

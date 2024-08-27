@@ -179,6 +179,26 @@ class CarBookingSerializer(serializers.ModelSerializer):
 
         booking = Booking.objects.create(**validated_data)
         return booking
+class ListCarBookingSerializer(serializers.ModelSerializer):
+    car = CarSerializer()  # Nested serializer to display car details
+
+    class Meta:
+        model = Booking
+        fields = (
+            'id', 
+            'user', 
+            'car', 
+            'start_date', 
+            'end_date', 
+            'pickup_time', 
+            'dropoff_time', 
+            'age', 
+            'is_approved', 
+            'total_amount', 
+            'pickup_location', 
+            'dropoff_location'
+        )
+        read_only_fields = ('total_amount', 'is_approved')
     
 class OrderSerializer(serializers.ModelSerializer):
     # booking = CarBookingSerializer()  # Nested serializer to display booking details

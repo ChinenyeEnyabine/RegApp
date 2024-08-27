@@ -2,7 +2,7 @@ from rest_framework import viewsets, permissions, filters
 
 from hotelbooking.filters import RoomTypeFilter
 from .models import Booking, Hotel, HotelOrder, RoomType
-from .serializers import BookingSerializer, HotelOrderSerializer, HotelSerializer, OrderSerializer, RoomTypeSerializer
+from .serializers import BookingSerializer, HotelOrderSerializer, HotelSerializer, ListHotelBookingSerializer, OrderSerializer, RoomTypeSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 
 class HotelViewSet(viewsets.ModelViewSet):
@@ -10,7 +10,7 @@ class HotelViewSet(viewsets.ModelViewSet):
     serializer_class = HotelSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['location', 'amenities']
-    search_fields = ['name']
+    search_fields = ['name','location']
     
 class RoomTypeViewSet(viewsets.ModelViewSet):
     queryset = RoomType.objects.all()
@@ -36,6 +36,19 @@ class BookingViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+
+class ListHotelBookingViewSet(viewsets.ModelViewSet):
+    serializer_class = ListHotelBookingSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return Booking.objects.all()
+        elif user.is_authenticated:
+            return Booking.objects.filter(user=user)
+        else:
+            return Booking.objects.none()
 class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
     permission_classes = [permissions.IsAuthenticated]

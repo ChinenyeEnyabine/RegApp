@@ -11,6 +11,7 @@ from .serializers import (
     CarSerializer, 
     CarMakeSerializer, 
     CarModelSerializer,
+    ListCarBookingSerializer,
     OrderSerializer
 )
 
@@ -35,9 +36,9 @@ class CarViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['model', 'price_per_day']
-    search_fields = ['name']
+    # search_fields = ['name']
     filterset_class = CarFilter
-    search_fields = ['model__name']
+    search_fields = ['model__name', 'model__make__name']
 
     def get_queryset(self):
         return super().get_queryset().filter(available=True)
@@ -75,6 +76,7 @@ class CarViewSet(viewsets.ModelViewSet):
 #     def perform_create(self, serializer):
 #         # Assign the user to the order
 #         serializer.save(user=self.request.user)
+
 class CarBookingViewSet(viewsets.ModelViewSet):
     serializer_class = CarBookingSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -90,6 +92,18 @@ class CarBookingViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         # Assign the user to the booking
         serializer.save(user=self.request.user)
+       
+class ListCarBookingViewSet(viewsets.ModelViewSet):
+    serializer_class = ListCarBookingSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return Booking.objects.all()
+        elif user.is_authenticated:
+            return Booking.objects.filter(user=user)
+        return Booking.objects.none()
 
 class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
